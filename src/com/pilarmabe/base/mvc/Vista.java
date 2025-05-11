@@ -142,20 +142,20 @@ public class Vista extends JFrame {
     }
 
     private void setListModels() {
+        System.out.println("setlistmodel");
         dlmRefugios = new DefaultListModel<>();
         dlmAnimales = new DefaultListModel<>();
-        listRefugio = new JList<>();
-        listAnimal = new JList<>();
-        comboRefugioAnimal = new JComboBox<>();
 
         listRefugio.setModel(dlmRefugios);
         listAnimal.setModel(dlmAnimales);
-
+        System.out.println("List refugio: " + listRefugio);
+        System.out.println("dlm refugio: " + dlmRefugios);
         dcbRefugio = new DefaultComboBoxModel<>();
         comboRefugioAnimal.setModel(dcbRefugio);
     }
 
     private void crearMenu() {
+        System.out.println("inicio crear menu");
         JMenuBar barra = new JMenuBar();
         JMenu menu = new JMenu("Archivo");
 
@@ -169,6 +169,7 @@ public class Vista extends JFrame {
         menu.add(salirItem);
         barra.add(menu);
         this.setJMenuBar(barra);
+        System.out.println("final crear menu");
     }
 
     public byte[] getFoto(){

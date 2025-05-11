@@ -23,8 +23,10 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         addActionListener(this);
         addListSelectionListener(this);
         addWindowListener(this);
+        addKeyListener(this);
 
         try {
+            listarRefugios();
             // base de datos¿?            
             // refrescarSeccionRefugios();
             // refrescarSeccionAnimales();
@@ -90,6 +92,11 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         vista.addWindowListener(listener);
     }
 
+    private void addKeyListener(KeyListener listener) {
+        vista.txtBuscarAnimal.addKeyListener(listener);
+        vista.txtBuscarRefugio.addKeyListener(listener);
+    }
+
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         String comando = actionEvent.getActionCommand();
@@ -97,6 +104,8 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
             switch (comando) {
                 case "Conectar": {
                     modelo.conectar();
+                    System.out.println("Conectado");
+                    listarRefugios();
                 }
                 break;
 
@@ -431,6 +440,14 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    private void listarRefugios(){
+        List<Refugio> refugios = modelo.obtenerRefugios();
+        vista.dlmRefugios.clear();
+        for(Refugio refugio : refugios){
+            vista.dlmRefugios.addElement(refugio);
+        }
+    }
+
     /**
      *  Método invocado al cerrar la ventana
      *  Se usa para desconectar
@@ -447,9 +464,21 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
     public void keyReleased(KeyEvent e) {
         if (e.getSource() == vista.txtBuscarAnimal) { 
             List<Animal> listarAnimales = modelo.obtenerAnimalesPorNombre(vista.txtBuscarAnimal.getText());
-        } else if (e.getSource() == vista.txtBuscarRefugio) { 
-            List<Refugio> listaRefugio = modelo.obtenerRefugiosPorNombre(vista.txtBuscarRefugio.getText());
+        } else if (e.getSource() == vista.txtBuscarRefugio) {
+            System.out.println("buscar refugio: " + vista.txtBuscarRefugio + ".");
+            System.out.println("buscar refugio: " + e.getSource() + ".");
+            if(vista.txtBuscarRefugio.getText().equals("")){
+                listarRefugios();
+            } else {
+                List<Refugio> listaRefugio = modelo.obtenerRefugiosPorNombre(vista.txtBuscarRefugio.getText());
+                System.out.println("listar refugio: " + listaRefugio);
+                vista.dlmRefugios.clear();
+                for (Refugio refugio : listaRefugio) {
+                    vista.dlmRefugios.addElement(refugio);
+                }
+            }
         }
+
     }
 
     @Override
