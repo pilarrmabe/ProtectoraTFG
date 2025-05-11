@@ -138,7 +138,6 @@ public class Vista extends JFrame {
         listVeterinario = new JList<>();
         listCentro = new JList<>();
 
-        // Asocia modelos a las listas
         listRefugio.setModel(new DefaultListModel<>());
         listAnimal.setModel(new DefaultListModel<>());
         listAdoptante.setModel(new DefaultListModel<>());
@@ -146,38 +145,31 @@ public class Vista extends JFrame {
         listVeterinario.setModel(new DefaultListModel<>());
         listCentro.setModel(new DefaultListModel<>());
         panel1 = new JPanel();
-        
-        // Inicialización de botones de Refugio
+
         btnRefAñadir = new JButton("Añadir Refugio");
         btnRefModificar = new JButton("Modificar Refugio");
         btnRefEliminar = new JButton("Eliminar Refugio");
 
-        // Inicialización de botones de Animal
         btnAnimalAnadir = new JButton("Añadir Animal");
         btnAnimalModificar = new JButton("Modificar Animal");
         btnAnimalEliminar = new JButton("Eliminar Animal");
 
-        // Inicialización de botones de Adoptante
         btnAniadirAdoptante = new JButton("Añadir Adoptante");
         btnModAdoptante = new JButton("Modificar Adoptante");
         btnEliminarAdoptante = new JButton("Eliminar Adoptante");
 
-        // Inicialización de botones de Adopción
         btnAniadirAdopcion = new JButton("Añadir Adopción");
         btnModAdopcion = new JButton("Modificar Adopción");
         btnEliminarAdopcion = new JButton("Eliminar Adopción");
 
-        // Inicialización de botones de Centro Veterinario
         btnAniadirCentro = new JButton("Añadir Centro");
         btnModCentro = new JButton("Modificar Centro");
         btnEliminarCentro = new JButton("Eliminar Centro");
 
-        // Inicialización de botones de Veterinario
         btnAniadirVet = new JButton("Añadir Veterinario");
         btnModVet = new JButton("Modificar Veterinario");
         btnEliminarVet = new JButton("Eliminar Veterinario");
 
-        // Agregar botones al panel (ejemplo para Refugio, puedes agregar más según tu diseño)
         panel1.add(btnRefAñadir);
         panel1.add(btnRefModificar);
         panel1.add(btnRefEliminar);
