@@ -1,8 +1,7 @@
 package com.pilarmabe.base.mvc;
 
 import com.github.lgooddatepicker.components.DatePicker;
-import com.pilarmabe.base.clases.Animal;
-import com.pilarmabe.base.clases.Refugio;
+import com.pilarmabe.base.clases.*;
 
 import javax.swing.*;
 
@@ -77,7 +76,7 @@ public class Vista extends JFrame {
     public JButton btnModAdoptante;
     public JButton btnEliminarAdoptante;
     public JTextField txtBuscarAdoptante;
-    public JList listAdoptante;
+    public JList<Adoptante> listAdoptante;
 
     // === Panel Adopción ===
     public JPanel JPanelAdopcion;
@@ -88,7 +87,7 @@ public class Vista extends JFrame {
     public JTextField txtObservacionAdopcion;
     public JTextField txtDocuAdopcion;
     public JTextField txtBuscarAdopcion;
-    public JList listAdopcion;
+    public JList<Adopcion> listAdopcion;
     public JButton btnAniadirAdopcion;
     public JButton btnModAdopcion;
     public JButton btnEliminarAdopcion;
@@ -102,7 +101,7 @@ public class Vista extends JFrame {
     public JButton btnAniadirCentro;
     public JButton btnModCentro;
     public JButton btnEliminarCentro;
-    public JList listCentro;
+    public JList<CentroVeterinario> listCentro;
     public JTextField txtDireccionCentro;
     public JTextField txtCpCentro;
     public JTextField txtTelfCentro;
@@ -120,7 +119,7 @@ public class Vista extends JFrame {
     public JTextField fotoVeterinario;
     public JTextField txtBuscarVeterinario;
     public JComboBox comboCentroDelVet;
-    public JList listVeterinario;
+    public JList<Veterinario> listVeterinario;
     public JButton btnAniadirVet;
     public JButton btnModVet;
     public JButton btnEliminarVet;
@@ -132,6 +131,7 @@ public class Vista extends JFrame {
     }
 
     public void initFrame() {
+
         this.setContentPane(panel1);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setSize(700, 300);
@@ -144,6 +144,9 @@ public class Vista extends JFrame {
     private void setListModels() {
         dlmRefugios = new DefaultListModel<>();
         dlmAnimales = new DefaultListModel<>();
+        listRefugio = new JList<>();
+        listAnimal = new JList<>();
+        comboRefugioAnimal = new JComboBox<>();
 
         listRefugio.setModel(dlmRefugios);
         listAnimal.setModel(dlmAnimales);
@@ -167,4 +170,21 @@ public class Vista extends JFrame {
         barra.add(menu);
         this.setJMenuBar(barra);
     }
+
+    public byte[] getFoto(){
+        byte[] foto = null;
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Selecciona una imagen");
+        int seleccion = fileChooser.showOpenDialog(this);
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            java.io.File archivo = fileChooser.getSelectedFile();
+            try {
+                foto = java.nio.file.Files.readAllBytes(archivo.toPath());
+            } catch (java.io.IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return foto;
+    }
+    
 }

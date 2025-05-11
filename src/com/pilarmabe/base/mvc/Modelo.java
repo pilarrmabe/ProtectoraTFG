@@ -7,8 +7,14 @@ import java.util.List;
 
 public class Modelo {
     public void conectar(){
-        HibernateUtil.buildSessionFactory();
-        HibernateUtil.openSession();
+        try {
+            HibernateUtil.buildSessionFactory();
+            HibernateUtil.openSession();
+            System.out.println("Conexión exitosa con la base de datos.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error al conectar con la base de datos: " + e.getMessage());
+        }
     }
 
     public void desconectar(){
@@ -19,11 +25,19 @@ public class Modelo {
         return HibernateUtil.getCurrentSession().createQuery("FROM Refugio").getResultList();
     }
 
+    public List<Refugio> obtenerRefugiosPorNombre(String nombre){
+        return HibernateUtil.getCurrentSession().createQuery("FROM Refugio WHERE nombre = :nombre").setParameter("nombre", nombre).getResultList();
+    }
+
     public List<Animal> obtenerAnimales() {
         return HibernateUtil.getCurrentSession().createQuery("FROM Animal").getResultList();
     }
 
-    public List<Animal> obtenerAdoptantes() {
+    public List<Animal> obtenerAnimalesPorNombre(String nombre) {
+        return HibernateUtil.getCurrentSession().createQuery("FROM Animal WHERE nombre = :nombre").setParameter("nombre", nombre).getResultList();
+    }
+
+    public List<Adoptante> obtenerAdoptantes() {
         return HibernateUtil.getCurrentSession().createQuery("FROM Adoptante").getResultList();
     }
 
