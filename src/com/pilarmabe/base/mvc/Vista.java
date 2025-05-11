@@ -1,13 +1,12 @@
 package com.pilarmabe.base.mvc;
 
 import com.github.lgooddatepicker.components.DatePicker;
-import com.pilarmabe.base.clases.Animal;
-import com.pilarmabe.base.clases.Refugio;
+import com.pilarmabe.base.clases.*;
 
 import javax.swing.*;
 
 public class Vista extends JFrame {
-    private JPanel panel1;
+    private JPanel panel1 = new JPanel();
     private JTabbedPane tabbedPane1;
     private final static String TITULO_FRAME = "Programa de Gestión para protectoras";
 
@@ -77,7 +76,7 @@ public class Vista extends JFrame {
     public JButton btnModAdoptante;
     public JButton btnEliminarAdoptante;
     public JTextField txtBuscarAdoptante;
-    public JList listAdoptante;
+    public JList<Adoptante> listAdoptante;
 
     // === Panel Adopción ===
     public JPanel JPanelAdopcion;
@@ -88,7 +87,7 @@ public class Vista extends JFrame {
     public JTextField txtObservacionAdopcion;
     public JTextField txtDocuAdopcion;
     public JTextField txtBuscarAdopcion;
-    public JList listAdopcion;
+    public JList<Adopcion> listAdopcion;
     public JButton btnAniadirAdopcion;
     public JButton btnModAdopcion;
     public JButton btnEliminarAdopcion;
@@ -102,7 +101,7 @@ public class Vista extends JFrame {
     public JButton btnAniadirCentro;
     public JButton btnModCentro;
     public JButton btnEliminarCentro;
-    public JList listCentro;
+    public JList<CentroVeterinario> listCentro;
     public JTextField txtDireccionCentro;
     public JTextField txtCpCentro;
     public JTextField txtTelfCentro;
@@ -120,7 +119,7 @@ public class Vista extends JFrame {
     public JTextField fotoVeterinario;
     public JTextField txtBuscarVeterinario;
     public JComboBox comboCentroDelVet;
-    public JList listVeterinario;
+    public JList<Veterinario> listVeterinario;
     public JButton btnAniadirVet;
     public JButton btnModVet;
     public JButton btnEliminarVet;
@@ -132,6 +131,57 @@ public class Vista extends JFrame {
     }
 
     public void initFrame() {
+        listRefugio = new JList<>();
+        listAnimal = new JList<>();
+        listAdoptante = new JList<>();
+        listAdopcion = new JList<>();
+        listVeterinario = new JList<>();
+        listCentro = new JList<>();
+
+        // Asocia modelos a las listas
+        listRefugio.setModel(new DefaultListModel<>());
+        listAnimal.setModel(new DefaultListModel<>());
+        listAdoptante.setModel(new DefaultListModel<>());
+        listAdopcion.setModel(new DefaultListModel<>());
+        listVeterinario.setModel(new DefaultListModel<>());
+        listCentro.setModel(new DefaultListModel<>());
+        panel1 = new JPanel();
+        
+        // Inicialización de botones de Refugio
+        btnRefAñadir = new JButton("Añadir Refugio");
+        btnRefModificar = new JButton("Modificar Refugio");
+        btnRefEliminar = new JButton("Eliminar Refugio");
+
+        // Inicialización de botones de Animal
+        btnAnimalAnadir = new JButton("Añadir Animal");
+        btnAnimalModificar = new JButton("Modificar Animal");
+        btnAnimalEliminar = new JButton("Eliminar Animal");
+
+        // Inicialización de botones de Adoptante
+        btnAniadirAdoptante = new JButton("Añadir Adoptante");
+        btnModAdoptante = new JButton("Modificar Adoptante");
+        btnEliminarAdoptante = new JButton("Eliminar Adoptante");
+
+        // Inicialización de botones de Adopción
+        btnAniadirAdopcion = new JButton("Añadir Adopción");
+        btnModAdopcion = new JButton("Modificar Adopción");
+        btnEliminarAdopcion = new JButton("Eliminar Adopción");
+
+        // Inicialización de botones de Centro Veterinario
+        btnAniadirCentro = new JButton("Añadir Centro");
+        btnModCentro = new JButton("Modificar Centro");
+        btnEliminarCentro = new JButton("Eliminar Centro");
+
+        // Inicialización de botones de Veterinario
+        btnAniadirVet = new JButton("Añadir Veterinario");
+        btnModVet = new JButton("Modificar Veterinario");
+        btnEliminarVet = new JButton("Eliminar Veterinario");
+
+        // Agregar botones al panel (ejemplo para Refugio, puedes agregar más según tu diseño)
+        panel1.add(btnRefAñadir);
+        panel1.add(btnRefModificar);
+        panel1.add(btnRefEliminar);
+
         this.setContentPane(panel1);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setSize(700, 300);
@@ -144,6 +194,9 @@ public class Vista extends JFrame {
     private void setListModels() {
         dlmRefugios = new DefaultListModel<>();
         dlmAnimales = new DefaultListModel<>();
+        listRefugio = new JList<>();
+        listAnimal = new JList<>();
+        comboRefugioAnimal = new JComboBox<>();
 
         listRefugio.setModel(dlmRefugios);
         listAnimal.setModel(dlmAnimales);
@@ -167,4 +220,21 @@ public class Vista extends JFrame {
         barra.add(menu);
         this.setJMenuBar(barra);
     }
+
+    public byte[] getFoto(){
+        byte[] foto = null;
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Selecciona una imagen");
+        int seleccion = fileChooser.showOpenDialog(this);
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            java.io.File archivo = fileChooser.getSelectedFile();
+            try {
+                foto = java.nio.file.Files.readAllBytes(archivo.toPath());
+            } catch (java.io.IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return foto;
+    }
+    
 }

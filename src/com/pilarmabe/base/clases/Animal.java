@@ -211,7 +211,7 @@ public class Animal {
     @Override
     public String toString() {
         return "Animal{" +
-                "idAnimal=" + idAnimal +
+                "idAnimal=" + id +
                 ", nombre='" + nombre + '\'' +
                 ", especie='" + especie + '\'' +
                 ", raza='" + raza + '\'' +

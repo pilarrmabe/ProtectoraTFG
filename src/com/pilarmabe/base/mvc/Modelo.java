@@ -19,11 +19,19 @@ public class Modelo {
         return HibernateUtil.getCurrentSession().createQuery("FROM Refugio").getResultList();
     }
 
+    public List<Refugio> obtenerRefugiosPorNombre(String nombre){
+        return HibernateUtil.getCurrentSession().createQuery("FROM Refugio WHERE nombre = :nombre").setParameter("nombre", nombre).getResultList();
+    }
+
     public List<Animal> obtenerAnimales() {
         return HibernateUtil.getCurrentSession().createQuery("FROM Animal").getResultList();
     }
 
-    public List<Animal> obtenerAdoptantes() {
+    public List<Animal> obtenerAnimalesPorNombre(String nombre) {
+        return HibernateUtil.getCurrentSession().createQuery("FROM Animal WHERE nombre = :nombre").setParameter("nombre", nombre).getResultList();
+    }
+
+    public List<Adoptante> obtenerAdoptantes() {
         return HibernateUtil.getCurrentSession().createQuery("FROM Adoptante").getResultList();
     }
 
