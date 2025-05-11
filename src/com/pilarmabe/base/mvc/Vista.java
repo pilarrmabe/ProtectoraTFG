@@ -6,7 +6,7 @@ import com.pilarmabe.base.clases.*;
 import javax.swing.*;
 
 public class Vista extends JFrame {
-    private JPanel panel1 = new JPanel();
+    private JPanel panel1;
     private JTabbedPane tabbedPane1;
     private final static String TITULO_FRAME = "Programa de Gestión para protectoras";
 
@@ -131,48 +131,6 @@ public class Vista extends JFrame {
     }
 
     public void initFrame() {
-        listRefugio = new JList<>();
-        listAnimal = new JList<>();
-        listAdoptante = new JList<>();
-        listAdopcion = new JList<>();
-        listVeterinario = new JList<>();
-        listCentro = new JList<>();
-
-        listRefugio.setModel(new DefaultListModel<>());
-        listAnimal.setModel(new DefaultListModel<>());
-        listAdoptante.setModel(new DefaultListModel<>());
-        listAdopcion.setModel(new DefaultListModel<>());
-        listVeterinario.setModel(new DefaultListModel<>());
-        listCentro.setModel(new DefaultListModel<>());
-        panel1 = new JPanel();
-
-        btnRefAñadir = new JButton("Añadir Refugio");
-        btnRefModificar = new JButton("Modificar Refugio");
-        btnRefEliminar = new JButton("Eliminar Refugio");
-
-        btnAnimalAnadir = new JButton("Añadir Animal");
-        btnAnimalModificar = new JButton("Modificar Animal");
-        btnAnimalEliminar = new JButton("Eliminar Animal");
-
-        btnAniadirAdoptante = new JButton("Añadir Adoptante");
-        btnModAdoptante = new JButton("Modificar Adoptante");
-        btnEliminarAdoptante = new JButton("Eliminar Adoptante");
-
-        btnAniadirAdopcion = new JButton("Añadir Adopción");
-        btnModAdopcion = new JButton("Modificar Adopción");
-        btnEliminarAdopcion = new JButton("Eliminar Adopción");
-
-        btnAniadirCentro = new JButton("Añadir Centro");
-        btnModCentro = new JButton("Modificar Centro");
-        btnEliminarCentro = new JButton("Eliminar Centro");
-
-        btnAniadirVet = new JButton("Añadir Veterinario");
-        btnModVet = new JButton("Modificar Veterinario");
-        btnEliminarVet = new JButton("Eliminar Veterinario");
-
-        panel1.add(btnRefAñadir);
-        panel1.add(btnRefModificar);
-        panel1.add(btnRefEliminar);
 
         this.setContentPane(panel1);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

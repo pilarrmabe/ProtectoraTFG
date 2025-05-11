@@ -7,8 +7,14 @@ import java.util.List;
 
 public class Modelo {
     public void conectar(){
-        HibernateUtil.buildSessionFactory();
-        HibernateUtil.openSession();
+        try {
+            HibernateUtil.buildSessionFactory();
+            HibernateUtil.openSession();
+            System.out.println("Conexión exitosa con la base de datos.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error al conectar con la base de datos: " + e.getMessage());
+        }
     }
 
     public void desconectar(){

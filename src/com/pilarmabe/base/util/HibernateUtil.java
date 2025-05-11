@@ -1,7 +1,9 @@
 package com.pilarmabe.base.util;
 
 import com.pilarmabe.base.clases.Refugio;
+import com.pilarmabe.base.clases.Veterinario;
 import com.pilarmabe.base.clases.Animal;
+import com.pilarmabe.base.clases.CentroVeterinario;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -25,6 +27,8 @@ public class HibernateUtil {
     // Se registran las clases que hay que mapear con cada tabla de la base de datos
     configuration.addAnnotatedClass(Refugio.class);
     configuration.addAnnotatedClass(Animal.class);
+    configuration.addAnnotatedClass(Veterinario.class);
+    configuration.addAnnotatedClass(CentroVeterinario.class);
 
     //Se crea una SessionFactory a partir del objeto Configuration
     ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
