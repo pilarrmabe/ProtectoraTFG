@@ -405,6 +405,13 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
             vista.txtNombreRef.setText(refugio.getNombre());
             vista.txtDireccionRef.setText(refugio.getDireccion()); // Cambiado txtApellido a txtDireccionRef
             vista.txtCiudadRef.setText(refugio.getCiudad()); // Cambiado txtAniosExperiencia a txtCiudadRef
+            // vista.txtCiudadRef.setText(refugio.getCiudad()); 
+            vista.txtCPRef.setText(refugio.getCodigoPostal()); // Cambiado txtTelefono a txtCPRef
+            vista.txtResponsable.setText(refugio.getResponsable()); // Cambiado txtTelefono a txtCPRef
+            vista.txtTelfRef.setText(refugio.getTelefono()); // Cambiado txtTelefono a txtCPRef
+            vista.txtEmailRef.setText(refugio.getEmail()); // Cambiado txtTelefono a txtCPRef
+            vista.capacidadRef.setValue(String.valueOf(refugio.getCapacidad())); // Cambiado txtTelefono a txtCPRef
+
 
         } else if (vista.listAdopcion.getSelectedValue() != null) {
             Adopcion a = vista.listAdopcion.getSelectedValue();

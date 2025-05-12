@@ -3,6 +3,8 @@ package com.pilarmabe.base.mvc;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.pilarmabe.base.clases.*;
 
+import javax.sql.rowset.serial.SerialBlob;
+import java.sql.Blob;
 import javax.swing.*;
 
 public class Vista extends JFrame {
@@ -134,7 +136,7 @@ public class Vista extends JFrame {
 
         this.setContentPane(panel1);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.setSize(700, 300);
+        this.setSize(1080, 900);
         crearMenu();
         this.setVisible(true);
         this.setLocationRelativeTo(null);
@@ -186,6 +188,15 @@ public class Vista extends JFrame {
             }
         }
         return foto;
+    }
+
+    public Blob convertirFotoABlob(byte[] foto) {
+        try {
+            return new SerialBlob(foto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
     
 }

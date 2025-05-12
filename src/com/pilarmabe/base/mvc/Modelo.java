@@ -113,6 +113,7 @@ public class Modelo {
     }
 
     public void modificarRefugio(Refugio refugio) {
+        System.out.println("Modificando refugio: " + refugio);
         HibernateUtil.getCurrentSession().beginTransaction();
         HibernateUtil.getCurrentSession().update(refugio);
         HibernateUtil.getCurrentSession().getTransaction().commit();
