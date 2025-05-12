@@ -15,12 +15,13 @@ public class Refugio {
     private String email;
     private int capacidad;
     private String fechaApertura;
-    private byte[] logoRefugio;
+    // private byte[] logoRefugio;
+    private String nombreLogoRefugio;
 
     public Refugio() {}
 
     public Refugio(String nombre, String direccion, String ciudad, String codigoPostal, String responsable,
-                   String telefono, String email, int capacidad, String fechaApertura, byte[] logoRefugio) {
+                   String telefono, String email, int capacidad, String fechaApertura, String logoRefugio) {
         this.nombre = nombre;
         this.direccion = direccion;
         this.ciudad = ciudad;
@@ -30,7 +31,7 @@ public class Refugio {
         this.email = email;
         this.capacidad = capacidad;
         this.fechaApertura = fechaApertura;
-        this.logoRefugio = logoRefugio;
+        this.nombreLogoRefugio = logoRefugio;
     }
 
     @Id
@@ -127,12 +128,12 @@ public class Refugio {
 
     @Lob
     @Column(name = "logoRefugio")
-    public byte[] getLogoRefugio() {
-        return logoRefugio;
+    public String getLogoRefugio() {
+        return nombreLogoRefugio;
     }
 
-    public void setLogoRefugio(byte[] logoRefugio) {
-        this.logoRefugio = logoRefugio;
+    public void setLogoRefugio(String logoRefugio) {
+        this.nombreLogoRefugio = logoRefugio;
     }
 
     @Override
@@ -161,7 +162,7 @@ public class Refugio {
                 ", email='" + email + '\'' +
                 ", capacidad=" + capacidad +
                 ", fechaApertura=" + fechaApertura +
-                ", logoRefugio=" + (logoRefugio != null ? "[Archivo de imagen]" : "Ningún logo") +
+                ", logoRefugio=" + (nombreLogoRefugio != null ? "[Archivo de imagen]" : "Ningún logo") +
                 '}';
     }
 }

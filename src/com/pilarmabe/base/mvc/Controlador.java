@@ -26,7 +26,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         addKeyListener(this);
 
         try {
-            listarRefugios();
+            listarRefugios(null);
             // base de datos¿?            
             // refrescarSeccionRefugios();
             // refrescarSeccionAnimales();
@@ -105,7 +105,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                 case "Conectar": {
                     modelo.conectar();
                     System.out.println("Conectado");
-                    listarRefugios();
+                    listarRefugios(null);
                 }
                 break;
 
@@ -125,8 +125,10 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                             vista.txtTelfRef.getText(),
                             vista.txtEmailRef.getText(),
                             Integer.parseInt(vista.capacidadRef.getValue().toString()),
-                            vista.fechaAperturaRef.getText(),
-                            vista.getFoto()
+                            vista.fechaAperturaRef.getDate().toString(),
+                            // vista.getFoto()
+                            vista.txtNombreRef.getText()
+
                     );
                     modelo.nuevoRefugio(refugio);
                     break;
@@ -440,11 +442,27 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
-    private void listarRefugios(){
+    private void listarRefugios(String nombre) {
         List<Refugio> refugios = modelo.obtenerRefugios();
         vista.dlmRefugios.clear();
+        if (nombre != null && !nombre.isEmpty() && !nombre.equals("")) {
+            refugios = modelo.obtenerRefugiosPorNombre(nombre);
+        }
+        
         for(Refugio refugio : refugios){
             vista.dlmRefugios.addElement(refugio);
+        }
+    }
+
+    private void listarAnimales(String nombre) {
+        List<Animal> animales = modelo.obtenerAnimales();
+        vista.dlmRefugios.clear();
+        if (nombre != null && !nombre.isEmpty() && !nombre.equals("")) {
+            animales = modelo.obtenerAnimalesPorNombre(nombre);
+        }
+
+        for(Animal animal : animales){
+            vista.dlmAnimales.addElement(animal);
         }
     }
 
@@ -463,20 +481,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getSource() == vista.txtBuscarAnimal) { 
-            List<Animal> listarAnimales = modelo.obtenerAnimalesPorNombre(vista.txtBuscarAnimal.getText());
+            listarAnimales(vista.txtBuscarRefugio.getText());
         } else if (e.getSource() == vista.txtBuscarRefugio) {
-            System.out.println("buscar refugio: " + vista.txtBuscarRefugio + ".");
-            System.out.println("buscar refugio: " + e.getSource() + ".");
-            if(vista.txtBuscarRefugio.getText().equals("")){
-                listarRefugios();
-            } else {
-                List<Refugio> listaRefugio = modelo.obtenerRefugiosPorNombre(vista.txtBuscarRefugio.getText());
-                System.out.println("listar refugio: " + listaRefugio);
-                vista.dlmRefugios.clear();
-                for (Refugio refugio : listaRefugio) {
-                    vista.dlmRefugios.addElement(refugio);
-                }
-            }
+            listarRefugios(vista.txtBuscarRefugio.getText());
         }
 
     }
