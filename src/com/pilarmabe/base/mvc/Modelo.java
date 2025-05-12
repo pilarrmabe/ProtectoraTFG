@@ -3,9 +3,13 @@ package com.pilarmabe.base.mvc;
 import com.pilarmabe.base.clases.*;
 import com.pilarmabe.base.util.HibernateUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Modelo {
+    private static List<Refugio> listaRefugios;
+    private static List<Animal> listaAnimales;
+    
     public void conectar(){
         try {
             HibernateUtil.buildSessionFactory();
@@ -22,19 +26,38 @@ public class Modelo {
     }
 
     public List<Refugio> obtenerRefugios(){
-        return HibernateUtil.getCurrentSession().createQuery("FROM Refugio").getResultList();
+        if (listaRefugios == null) {
+            listaRefugios =  HibernateUtil.getCurrentSession().createQuery("FROM Refugio").getResultList();
+        }
+        return listaRefugios;
     }
 
     public List<Refugio> obtenerRefugiosPorNombre(String nombre){
-        return HibernateUtil.getCurrentSession().createQuery("FROM Refugio WHERE nombre = :nombre").setParameter("nombre", nombre).getResultList();
+        List<Refugio> listaRefugiosFiltrados = new ArrayList<>();
+        for(Refugio refugio : listaRefugios) {
+            if (refugio.getNombre().contains(nombre)) {
+                listaRefugiosFiltrados.add(refugio);
+            }
+        }
+        return listaRefugiosFiltrados;
+
     }
 
     public List<Animal> obtenerAnimales() {
-        return HibernateUtil.getCurrentSession().createQuery("FROM Animal").getResultList();
+        if (listaAnimales == null) {
+            listaAnimales = HibernateUtil.getCurrentSession().createQuery("FROM Animal").getResultList();
+        }
+        return listaAnimales;
     }
 
     public List<Animal> obtenerAnimalesPorNombre(String nombre) {
-        return HibernateUtil.getCurrentSession().createQuery("FROM Animal WHERE nombre = :nombre").setParameter("nombre", nombre).getResultList();
+        List<Animal> listaAnimalesFiltrados = new ArrayList<>();
+        for(Animal animal : listaAnimales) {
+            if (animal.getNombre().contains(nombre)) {
+                listaAnimalesFiltrados.add(animal);
+            }
+        }
+        return listaAnimalesFiltrados;
     }
 
     public List<Adoptante> obtenerAdoptantes() {
