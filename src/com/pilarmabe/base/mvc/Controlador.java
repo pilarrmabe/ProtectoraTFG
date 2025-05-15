@@ -1,13 +1,16 @@
 package com.pilarmabe.base.mvc;
 
 import com.pilarmabe.base.clases.*;
+import com.pilarmabe.base.clases.ValoresCombos.TipoUsuario;
 import com.pilarmabe.base.util.HibernateUtil;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.*;
+import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +29,11 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         addKeyListener(this);
 
         try {
+            controlUsuarios();
             listarRefugios(null);
+            refrescarPanelUsuarios();
+            cargarCombos();
+            // listarRefugios(null);
             // base de datos¿?            
             // refrescarSeccionRefugios();
             // refrescarSeccionAnimales();
@@ -35,7 +42,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
             // refrescarSeccionVeterinarios();
             // refrescarSeccionCentrosVeterinarios();
         } catch (Exception e) {
-            System.out.println("Iniciando el programa...");
+            System.out.println("Error al iniciar programa");
         }
     }
 
@@ -53,30 +60,35 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         vista.btnAnimalModificar.setActionCommand("ModificarAnimal");
         vista.btnAnimalEliminar.addActionListener(listener);
         vista.btnAnimalEliminar.setActionCommand("EliminarAnimal");
+        vista.btnAnimalAnadir.addActionListener(listener);
 
-        vista.btnAniadirAdoptante.addActionListener(listener);
-        vista.btnAniadirAdoptante.setActionCommand("NuevoAdoptante");
-        vista.btnModAdoptante.addActionListener(listener);
-        vista.btnModAdoptante.setActionCommand("ModificarAdoptante");
-        vista.btnEliminarAdoptante.addActionListener(listener);
-        vista.btnEliminarAdoptante.setActionCommand("EliminarAdoptante");
-
-        vista.btnAniadirAdopcion.addActionListener(listener);
-        vista.btnAniadirAdopcion.setActionCommand("NuevaAdopcion");
-        vista.btnModAdopcion.addActionListener(listener);
-        vista.btnModAdopcion.setActionCommand("ModificarAdopcion");
-        vista.btnEliminarAdopcion.addActionListener(listener);
-        vista.btnEliminarAdopcion.setActionCommand("EliminarAdopcion");
-
-        vista.btnAniadirCentro.addActionListener(listener);
-        vista.btnAniadirCentro.setActionCommand("NuevoCentro");
-        vista.btnModCentro.addActionListener(listener);
-        vista.btnModCentro.setActionCommand("ModificarCentro");
-        vista.btnEliminarCentro.addActionListener(listener);
-        vista.btnEliminarCentro.setActionCommand("EliminarCentro");
+        vista.btnUsuarioAnadir.setActionCommand("NuevoUsuario");
+        vista.btnUsuarioAnadir.addActionListener(listener);
+        vista.btnUsuarioModificar.setActionCommand("ModificarUsuario");
+        vista.btnUsuarioModificar.addActionListener(listener);
+        vista.btnUsuarioEliminar.setActionCommand("EliminarUsuario");
+        vista.btnUsuarioEliminar.addActionListener(listener);
 
         vista.conexionItem.addActionListener(listener);
         vista.salirItem.addActionListener(listener);
+    }
+
+    private void controlUsuarios(){
+        vista.btnRefAñadir.setVisible(false);
+        vista.btnRefModificar.setVisible(false);
+        vista.btnRefEliminar.setVisible(false);
+        
+        switch (modelo.getUsuario()) {
+            case "Edición":
+                vista.btnRefAñadir.setVisible(true);
+                vista.btnRefModificar.setVisible(true);
+                break;
+            case "Administrador":
+                vista.btnRefAñadir.setVisible(true);
+                vista.btnRefModificar.setVisible(true);
+                vista.btnRefEliminar.setVisible(true);
+                break;
+        }
     }
 
     private void addListSelectionListener(ListSelectionListener listener) {
@@ -106,6 +118,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                     modelo.conectar();
                     System.out.println("Conectado");
                     listarRefugios(null);
+                    refrescarPanelUsuarios();
                 }
                 break;
 
@@ -117,20 +130,21 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                 // refugio
                 case "NuevoRefugio": {
                     Refugio refugio = new Refugio(
-                            vista.txtNombreRef.getText(),
-                            vista.txtDireccionRef.getText(),
-                            vista.txtCiudadRef.getText(),
-                            vista.txtCPRef.getText(),
-                            vista.txtResponsable.getText(),
-                            vista.txtTelfRef.getText(),
-                            vista.txtEmailRef.getText(),
-                            Integer.parseInt(vista.capacidadRef.getValue().toString()),
-                            vista.fechaAperturaRef.getDate().toString(),
+                        vista.txtNombreRef.getText(),
+                        vista.txtDireccionRef.getText(),
+                        vista.txtCiudadRef.getText(),
+                        vista.txtCPRef.getText(),
+                        vista.txtResponsable.getText(),
+                        vista.txtTelfRef.getText(),
+                        vista.txtEmailRef.getText(),
+                        Integer.parseInt(vista.capacidadRef.getValue().toString()),
+                        vista.fechaAperturaRef.getDate().toString(),
                             // vista.getFoto()
                             vista.txtNombreRef.getText()
 
                     );
                     modelo.nuevoRefugio(refugio);
+                    refrescarPanelRefugios();
                     break;
                 }
 
@@ -145,9 +159,10 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                         refugioSeleccionado.setTelefono(vista.txtTelfRef.getText());
                         refugioSeleccionado.setEmail(vista.txtEmailRef.getText());
                         refugioSeleccionado.setCapacidad(Integer.parseInt(vista.capacidadRef.getValue().toString()));
-                        refugioSeleccionado.setFechaApertura(vista.fechaAperturaRef.getText());
+                        refugioSeleccionado.setFechaApertura(vista.fechaAperturaRef.getDate().toString());
 
                         modelo.modificarRefugio(refugioSeleccionado);
+                        refrescarPanelRefugios();
                     } else {
                         JOptionPane.showMessageDialog(vista, "Seleccione un refugio para modificar.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
@@ -158,6 +173,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                 case "EliminarRefugio": {
                     Refugio refugio = vista.listRefugio.getSelectedValue();
                     modelo.eliminarRefugio(refugio);
+                    refrescarPanelRefugios();
                     break;
                 }
 
@@ -365,6 +381,42 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                     break;
                 }
 
+                // Usuario
+                case "NuevoUsuario": {
+                    System.out.println("Nuevo Usuario");
+                    Usuario usuario = new Usuario(
+                        vista.txtNombre.getText(),
+                        vista.txtPass.getText(),
+                        vista.comboTipoUsuario.getSelectedItem().toString()
+                    );
+                    System.out.println("Usuario creado"+usuario);
+                    modelo.nuevoUsuario(usuario);
+                    refrescarPanelUsuarios();
+                    break;
+                }
+                case "ModificarUsuario": {
+                    CentroVeterinario seleccion = vista.listCentro.getSelectedValue();
+                    if (seleccion != null) {
+                        seleccion.setNombre(vista.txtNombreCentro.getText()); // Cambiado txtNombre a txtNombreCentro
+                        seleccion.setDireccion(vista.txtDireccionCentro.getText()); // Cambiado txtDireccion a txtDireccionCentro
+                        seleccion.setCodigoPostal(vista.txtCpCentro.getText()); // Cambiado txtCodigoPostal a txtCpCentro
+                        seleccion.setTelefono(vista.txtTelfCentro.getText()); // Cambiado txtTelefono a txtTelfCentro
+                        seleccion.setEmail(vista.txtEmailCentro.getText()); // Cambiado txtEmail a txtEmailCentro
+                        seleccion.setFechaRegistro(vista.fechaRegistroCentro.getDate().toString()); // Cambiado getFechaRegistro() a fechaRegistroCentro.getDate().toString()
+                        seleccion.setServicioUrgencias(vista.urgenciasCentro.isSelected()); // Cambiado chkServicioUrgencias a urgenciasCentro
+                        seleccion.setFotoCentro(vista.getFoto()); // Cambiado getFotoCentro() a getFoto()
+                        modelo.modificarVeterinario(seleccion);
+                    } else {
+                        JOptionPane.showMessageDialog(vista, "Seleccione un centro veterinario para modificar.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
+                }
+                case "EliminarUsuario": {
+                    CentroVeterinario seleccion = vista.listCentro.getSelectedValue();
+                    modelo.eliminarCentroVeterinario(seleccion);
+                    break;
+                }
+
             }
             // base de datos?
             // refrescarSeccionRefugios();
@@ -410,7 +462,10 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
             vista.txtResponsable.setText(refugio.getResponsable()); // Cambiado txtTelefono a txtCPRef
             vista.txtTelfRef.setText(refugio.getTelefono()); // Cambiado txtTelefono a txtCPRef
             vista.txtEmailRef.setText(refugio.getEmail()); // Cambiado txtTelefono a txtCPRef
-            vista.capacidadRef.setValue(String.valueOf(refugio.getCapacidad())); // Cambiado txtTelefono a txtCPRef
+            vista.capacidadRef.setValue(refugio.getCapacidad()); // Cambiado txtTelefono a txtCPRef
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Ajusta el formato si es necesario
+            LocalDate fechaApertura = LocalDate.parse(refugio.getFechaApertura(), formatter);
+            vista.fechaAperturaRef.setDate(fechaApertura);
 
 
         } else if (vista.listAdopcion.getSelectedValue() != null) {
@@ -438,19 +493,34 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
 
     // poner todos los combos que hay
     private void cargarCombos() {
+        vista.comboTipoUsuario.removeAllItems();
+        for (ValoresCombos.TipoUsuario tipo : ValoresCombos.TipoUsuario.values()) {
+            vista.comboTipoUsuario.addItem(tipo); 
+        }
+
         vista.comboAnimalAdopcion.removeAllItems();
         for (Animal a : modelo.obtenerAnimales()) {
-            vista.comboAnimalAdopcion.addItem(a); // Asegúrate de que este JComboBox maneja objetos de tipo Animal
+            vista.comboAnimalAdopcion.addItem(a); 
         }
 
         vista.comboAdoptanteAdopcion.removeAllItems();
         for (Adoptante ad : modelo.obtenerAdoptantes()) {
-            vista.comboAdoptanteAdopcion.addItem(ad); // Asegúrate de que este JComboBox maneja objetos de tipo Adoptante
+            vista.comboAdoptanteAdopcion.addItem(ad);
         }
     }
 
+    private void refrescarPanelRefugios(){
+        modelo.obtenerRefugios(true);
+        listarUsuarios(null);
+    }
+
+    private void refrescarPanelUsuarios(){
+        modelo.obtenerUsuarios(true);
+        listarUsuarios(null);
+    }
+
     private void listarRefugios(String nombre) {
-        List<Refugio> refugios = modelo.obtenerRefugios();
+        List<Refugio> refugios = modelo.obtenerRefugios(false);
         vista.dlmRefugios.clear();
         if (nombre != null && !nombre.isEmpty() && !nombre.equals("")) {
             refugios = modelo.obtenerRefugiosPorNombre(nombre);
@@ -458,6 +528,18 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         
         for(Refugio refugio : refugios){
             vista.dlmRefugios.addElement(refugio);
+        }
+    }
+
+    private void listarUsuarios(String nombre) {
+        List<Usuario> listaUsuarios = modelo.obtenerUsuarios(false);
+        vista.dlmUsuarios.clear();
+        if (nombre != null && !nombre.isEmpty() && !nombre.equals("")) {
+            // usuarios = modelo.obtenerUsuariosPorNombre(nombre);
+        }
+        
+        for(Usuario usuario : listaUsuarios){
+            vista.dlmUsuarios.addElement(usuario);
         }
     }
 

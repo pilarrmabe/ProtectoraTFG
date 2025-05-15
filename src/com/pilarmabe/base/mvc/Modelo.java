@@ -2,13 +2,28 @@ package com.pilarmabe.base.mvc;
 
 import com.pilarmabe.base.clases.*;
 import com.pilarmabe.base.util.HibernateUtil;
+import com.sun.tools.javac.Main;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class Modelo {
     private static List<Refugio> listaRefugios;
     private static List<Animal> listaAnimales;
+    private static List<Usuario> listaUsuarios;
+    public String usuario = null;
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
     
     public void conectar(){
         try {
@@ -21,15 +36,46 @@ public class Modelo {
         }
     }
 
+    public void loginUsuario(String usuario, String password){
+        try {
+            HibernateUtil.getCurrentSession().beginTransaction();
+            Usuario usuarioLogueado = (Usuario) HibernateUtil.getCurrentSession()
+                    .createQuery("FROM Usuario WHERE nombre = :nombre AND pass = :pass")
+                    .setParameter("nombre", usuario)
+                    .setParameter("pass", password)
+                    .uniqueResult();
+                    
+            if (usuarioLogueado != null) {
+                setUsuario(usuarioLogueado.getTipoUsuario());
+                // System.out.println("Usuario logueado: " + this.usuario);
+            }
+            HibernateUtil.getCurrentSession().getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error al conectar con la base de datos: " + e.getMessage());
+        }
+    }
+
     public void desconectar(){
         HibernateUtil.closeSessionFactory();
     }
 
-    public List<Refugio> obtenerRefugios(){
-        if (listaRefugios == null) {
+    public List<Refugio> obtenerRefugios(Boolean refrescar) {
+        if (listaRefugios == null || refrescar) {
+            System.out.println("iniciando lista de refugios");
             listaRefugios =  HibernateUtil.getCurrentSession().createQuery("FROM Refugio").getResultList();
+            System.out.println("lista de refugios: " + listaRefugios);
         }
         return listaRefugios;
+    }
+
+    public List<Usuario> obtenerUsuarios(Boolean refrescar) {
+        if (listaUsuarios == null || refrescar) {
+            System.out.println("iniciando lista de usuarios");
+            listaUsuarios =  HibernateUtil.getCurrentSession().createQuery("FROM Usuario").getResultList();
+            System.out.println("lista de usuarios: " + listaUsuarios);
+        }
+        return listaUsuarios;
     }
 
     public List<Refugio> obtenerRefugiosPorNombre(String nombre){
@@ -109,6 +155,25 @@ public class Modelo {
     public void nuevoCentroVeterinario(CentroVeterinario centroVeterinario) {
         HibernateUtil.getCurrentSession().beginTransaction();
         HibernateUtil.getCurrentSession().saveOrUpdate(centroVeterinario);
+        HibernateUtil.getCurrentSession().getTransaction().commit();
+    }
+
+    public void nuevoUsuario(Usuario usuario) {
+        for(Usuario u : listaUsuarios) {
+            if (u.getNombre().equals(usuario.getNombre())) {
+                JFrame loginFrame = new JFrame("Iniciar sesión");
+                // loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                // loginFrame.setSize(320, 320);
+                // loginFrame.setLayout(new BorderLayout());
+                // loginFrame.setLocationRelativeTo(null); // Centrar ventana
+                // loginFrame.setVisible(true);
+                JOptionPane.showMessageDialog(loginFrame, "El usuario introducido ya existe", "Error", JOptionPane.ERROR_MESSAGE);
+
+                return;
+            }
+        }
+        HibernateUtil.getCurrentSession().beginTransaction();
+        HibernateUtil.getCurrentSession().saveOrUpdate(usuario);
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 

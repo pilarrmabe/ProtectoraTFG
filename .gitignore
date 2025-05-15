@@ -1,0 +1,3 @@
+*.class
+out/production/Practica2-UD3-PilarMayayoBerruezo/hibernate.cfg.xml
+.idea/misc.xml

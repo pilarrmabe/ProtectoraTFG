@@ -20,6 +20,7 @@
     <mapping class="com.pilarmabe.base.clases.Animal"/>
     <mapping class="com.pilarmabe.base.clases.Adoptante"/>
     <mapping class="com.pilarmabe.base.clases.Adopcion"/>
+    <mapping class="com.pilarmabe.base.clases.Usuario"/>
 
   </session-factory>
 </hibernate-configuration>

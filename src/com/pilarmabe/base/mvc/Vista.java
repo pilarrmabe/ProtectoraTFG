@@ -10,6 +10,7 @@ import javax.swing.*;
 public class Vista extends JFrame {
     private JPanel panel1;
     private JTabbedPane tabbedPane1;
+    
     private final static String TITULO_FRAME = "Programa de Gestión para protectoras";
 
     // Menú
@@ -19,6 +20,7 @@ public class Vista extends JFrame {
     // List Models
     public DefaultListModel<Refugio> dlmRefugios;
     public DefaultListModel<Animal> dlmAnimales;
+    public DefaultListModel<Usuario> dlmUsuarios;
     public DefaultComboBoxModel<Refugio> dcbRefugio;
 
     // === Panel Animal ===
@@ -126,6 +128,19 @@ public class Vista extends JFrame {
     public JButton btnModVet;
     public JButton btnEliminarVet;
 
+    // Usuarios
+    public JPanel JPanelUsuarios;
+    public JTextField txtNombre;
+    public JTextField txtPass;
+    public JComboBox comboTipoUsuario;
+    public JButton btnUsuarioAnadir;
+    public JButton btnUsuarioModificar;
+    public JButton btnUsuarioEliminar;
+    public JList<Usuario> listUsuario;
+
+
+
+
     // === Constructor e Inicialización ===
     public Vista() {
         super(TITULO_FRAME);
@@ -147,9 +162,12 @@ public class Vista extends JFrame {
         System.out.println("setlistmodel");
         dlmRefugios = new DefaultListModel<>();
         dlmAnimales = new DefaultListModel<>();
+        dlmRefugios = new DefaultListModel<>();
+        dlmUsuarios = new DefaultListModel<>();
 
         listRefugio.setModel(dlmRefugios);
         listAnimal.setModel(dlmAnimales);
+        listUsuario.setModel(dlmUsuarios);
         System.out.println("List refugio: " + listRefugio);
         System.out.println("dlm refugio: " + dlmRefugios);
         dcbRefugio = new DefaultComboBoxModel<>();
