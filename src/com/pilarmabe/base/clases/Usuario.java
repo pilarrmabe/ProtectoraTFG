@@ -48,7 +48,7 @@ public class Usuario {
     public String getTipoUsuario() {
         return tipoUsuario;
     }
-
+      
     public void setTipoUsuario(String tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
@@ -58,6 +58,8 @@ public class Usuario {
         return "Usuario{" +
                 "idUsuario=" + idUsuario +
                 ", nombre='" + nombre + '\'' +
-                ", pass='" + pass;
+                ", pass='" + pass + '\'' +
+                ", tipoUsuario='" + tipoUsuario;
     }
+
 }

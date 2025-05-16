@@ -15,6 +15,7 @@ public class Modelo {
     private static List<Refugio> listaRefugios;
     private static List<Animal> listaAnimales;
     private static List<Usuario> listaUsuarios;
+    private static List<CentroVeterinario> listaCentroVeterinario;
     public String usuario = null;
 
     public String getUsuario() {
@@ -114,12 +115,28 @@ public class Modelo {
         return HibernateUtil.getCurrentSession().createQuery("FROM Adopcion").getResultList();
     }
 
-    public List<Animal> obtenerVeterinarios() {
+    public List<Veterinario> obtenerVeterinarios() {
         return HibernateUtil.getCurrentSession().createQuery("FROM Veterinario").getResultList();
     }
 
-    public List<Animal> obtenerCentrosVeterinarios() {
-        return HibernateUtil.getCurrentSession().createQuery("FROM CentroVeterinario").getResultList();
+    public List<CentroVeterinario> obtenerCentrosVeterinarios(Boolean refrescar) {
+        if (listaUsuarios == null || refrescar) {
+            System.out.println("iniciando lista de centros veterinarios");
+            listaCentroVeterinario =  HibernateUtil.getCurrentSession().createQuery("FROM CentroVeterinario").getResultList();
+            System.out.println("lista de centros veterinarios: " + listaCentroVeterinario);
+        }
+        return listaCentroVeterinario;
+    }
+
+    public List<CentroVeterinario> obtenerCentrosPorNombre(String nombre){
+        List<CentroVeterinario> listaCentrosFiltrados = new ArrayList<>();
+        for(CentroVeterinario centro : listaCentroVeterinario) {
+            if (centro.getNombre().contains(nombre)) {
+                listaCentrosFiltrados.add(centro);
+            }
+        }
+        return listaCentrosFiltrados;
+
     }
 
     public void nuevoRefugio(Refugio refugio) {
@@ -162,13 +179,7 @@ public class Modelo {
         for(Usuario u : listaUsuarios) {
             if (u.getNombre().equals(usuario.getNombre())) {
                 JFrame loginFrame = new JFrame("Iniciar sesión");
-                // loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                // loginFrame.setSize(320, 320);
-                // loginFrame.setLayout(new BorderLayout());
-                // loginFrame.setLocationRelativeTo(null); // Centrar ventana
-                // loginFrame.setVisible(true);
                 JOptionPane.showMessageDialog(loginFrame, "El usuario introducido ya existe", "Error", JOptionPane.ERROR_MESSAGE);
-
                 return;
             }
         }
@@ -214,6 +225,12 @@ public class Modelo {
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 
+    public void modificarUsuario(Usuario usuario) {
+        HibernateUtil.getCurrentSession().beginTransaction();
+        HibernateUtil.getCurrentSession().update(usuario);
+        HibernateUtil.getCurrentSession().getTransaction().commit();
+    }
+
     public void eliminarRefugio(Refugio refugio) {
         HibernateUtil.getCurrentSession().beginTransaction();
         HibernateUtil.getCurrentSession().delete(refugio);
@@ -247,6 +264,12 @@ public class Modelo {
     public void eliminarCentroVeterinario(CentroVeterinario centroVeterinario) {
         HibernateUtil.getCurrentSession().beginTransaction();
         HibernateUtil.getCurrentSession().delete(centroVeterinario);
+        HibernateUtil.getCurrentSession().getTransaction().commit();
+    }
+
+    public void eliminarUsuario(Usuario usuario) {
+        HibernateUtil.getCurrentSession().beginTransaction();
+        HibernateUtil.getCurrentSession().delete(usuario);
         HibernateUtil.getCurrentSession().getTransaction().commit();
     }
 

@@ -10,7 +10,7 @@ import javax.swing.*;
 public class Vista extends JFrame {
     private JPanel panel1;
     private JTabbedPane tabbedPane1;
-    
+
     private final static String TITULO_FRAME = "Programa de Gestión para protectoras";
 
     // Menú
@@ -21,6 +21,7 @@ public class Vista extends JFrame {
     public DefaultListModel<Refugio> dlmRefugios;
     public DefaultListModel<Animal> dlmAnimales;
     public DefaultListModel<Usuario> dlmUsuarios;
+    public DefaultListModel<CentroVeterinario> dlmCentros;
     public DefaultComboBoxModel<Refugio> dcbRefugio;
 
     // === Panel Animal ===
@@ -138,9 +139,6 @@ public class Vista extends JFrame {
     public JButton btnUsuarioEliminar;
     public JList<Usuario> listUsuario;
 
-
-
-
     // === Constructor e Inicialización ===
     public Vista() {
         super(TITULO_FRAME);
@@ -164,10 +162,12 @@ public class Vista extends JFrame {
         dlmAnimales = new DefaultListModel<>();
         dlmRefugios = new DefaultListModel<>();
         dlmUsuarios = new DefaultListModel<>();
+        dlmCentros = new DefaultListModel<>();
 
         listRefugio.setModel(dlmRefugios);
         listAnimal.setModel(dlmAnimales);
         listUsuario.setModel(dlmUsuarios);
+        listCentro.setModel(dlmCentros);
         System.out.println("List refugio: " + listRefugio);
         System.out.println("dlm refugio: " + dlmRefugios);
         dcbRefugio = new DefaultComboBoxModel<>();
@@ -192,7 +192,7 @@ public class Vista extends JFrame {
         System.out.println("final crear menu");
     }
 
-    public byte[] getFoto(){
+    public byte[] getFoto() {
         byte[] foto = null;
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Selecciona una imagen");
@@ -216,5 +216,5 @@ public class Vista extends JFrame {
             return null;
         }
     }
-    
+
 }

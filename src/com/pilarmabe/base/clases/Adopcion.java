@@ -12,21 +12,24 @@ public class Adopcion {
     private Date fechaAdopcion;
     private String estadoAdopcion;
     private String observaciones;
-    private byte[] documentoAdopcion;
+    // private byte[] documentoAdopcion;
 
     public Adopcion() {
     }
 
-    public Adopcion(Animal animal, Adoptante adoptante, Date fechaAdopcion, String estadoAdopcion, String observaciones, byte[] documentoAdopcion) {
+    public Adopcion(Animal animal, Adoptante adoptante, Date fechaAdopcion, String estadoAdopcion, String observaciones) {
         this.animal = animal;
         this.adoptante = adoptante;
         this.fechaAdopcion = fechaAdopcion;
         this.estadoAdopcion = estadoAdopcion;
         this.observaciones = observaciones;
-        this.documentoAdopcion = documentoAdopcion;
+        // this.documentoAdopcion = documentoAdopcion;
     }
 
     @Id
+    @GeneratedValue(
+            strategy = GenerationType.IDENTITY
+    )
     @Column(name = "idAdopcion")
     public int getIdAdopcion() {
         return idAdopcion;
@@ -87,15 +90,15 @@ public class Adopcion {
         this.observaciones = observaciones;
     }
 
-    @Basic
-    @Column(name = "documentoAdopcion")
-    public byte[] getDocumentoAdopcion() {
-        return documentoAdopcion;
-    }
+    // @Basic
+    // @Column(name = "documentoAdopcion")
+    // public byte[] getDocumentoAdopcion() {
+    //     return documentoAdopcion;
+    // }
 
-    public void setDocumentoAdopcion(byte[] documentoAdopcion) {
-        this.documentoAdopcion = documentoAdopcion;
-    }
+    // public void setDocumentoAdopcion(byte[] documentoAdopcion) {
+    //     this.documentoAdopcion = documentoAdopcion;
+    // }
 
     @Override
     public boolean equals(Object o) {
@@ -107,13 +110,13 @@ public class Adopcion {
                 Objects.equals(adoptante, adopcion.adoptante) &&
                 Objects.equals(fechaAdopcion, adopcion.fechaAdopcion) &&
                 Objects.equals(estadoAdopcion, adopcion.estadoAdopcion) &&
-                Objects.equals(observaciones, adopcion.observaciones) &&
-                Objects.equals(documentoAdopcion, adopcion.documentoAdopcion);
+                Objects.equals(observaciones, adopcion.observaciones);
+                // Objects.equals(documentoAdopcion, adopcion.documentoAdopcion);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idAdopcion, animal, adoptante, fechaAdopcion, estadoAdopcion, observaciones, documentoAdopcion);
+        return Objects.hash(idAdopcion, animal, adoptante, fechaAdopcion, estadoAdopcion, observaciones);
     }
 
     @Override
@@ -125,7 +128,7 @@ public class Adopcion {
                 ", fechaAdopcion=" + fechaAdopcion +
                 ", estadoAdopcion='" + estadoAdopcion + '\'' +
                 ", observaciones='" + observaciones + '\'' +
-                ", documentoAdopcion=" + (documentoAdopcion != null ? "[Archivo]" : "Ningún documento") +
+                // ", documentoAdopcion=" + (documentoAdopcion != null ? "[Archivo]" : "Ningún documento") +
                 '}';
     }
 }
