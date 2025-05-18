@@ -18,7 +18,7 @@ public class Animal {
     private String comportamiento;
     private String necesidades;
     private String numeroMicrochip;
-    private byte[] foto;
+    // private byte[] foto;
     private Refugio refugio;
     private Veterinario veterinario;
 
@@ -27,7 +27,7 @@ public class Animal {
 
     public Animal(String nombre, String especie, String raza, String sexo, String fechaNacimiento,
                   String fechaIngreso, int edad, double peso, String salud, String comportamiento,
-                  String necesidades, String numeroMicrochip, byte[] foto,
+                  String necesidades, String numeroMicrochip,
                   Refugio refugio, Veterinario veterinario) {
         this.nombre = nombre;
         this.especie = especie;
@@ -41,7 +41,7 @@ public class Animal {
         this.comportamiento = comportamiento;
         this.necesidades = necesidades;
         this.numeroMicrochip = numeroMicrochip;
-        this.foto = foto;
+        // this.foto = foto;
         this.refugio = refugio;
         this.veterinario = veterinario;
     }
@@ -165,15 +165,15 @@ public class Animal {
         this.numeroMicrochip = numeroMicrochip;
     }
 
-    @Lob
-    @Column(name = "foto")
-    public byte[] getFoto() {
-        return foto;
-    }
+    // @Lob
+    // @Column(name = "foto")
+    // public byte[] getFoto() {
+    //     return foto;
+    // }
 
-    public void setFoto(byte[] foto) {
-        this.foto = foto;
-    }
+    // public void setFoto(byte[] foto) {
+    //     this.foto = foto;
+    // }
 
     @ManyToOne
     @JoinColumn(name = "idRefugio", referencedColumnName = "idRefugio")
@@ -224,7 +224,7 @@ public class Animal {
                 ", comportamiento='" + comportamiento + '\'' +
                 ", necesidades='" + necesidades + '\'' +
                 ", numeroMicrochip='" + numeroMicrochip + '\'' +
-                ", foto=" + (foto != null ? "[Archivo de imagen]" : "Ninguna foto") +
+                // ", foto=" + (foto != null ? "[Archivo de imagen]" : "Ninguna foto") +
                 ", refugio=" + refugio +
                 ", veterinario=" + veterinario +
                 '}';

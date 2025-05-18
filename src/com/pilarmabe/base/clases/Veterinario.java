@@ -12,21 +12,21 @@ public class Veterinario {
     private String email;
     private String especialidad;
     private int aniosExperiencia;
-    private byte[] foto;
+    // private byte[] foto;
     private CentroVeterinario centroVeterinario;
 
     public Veterinario() {
     }
 
     public Veterinario(String nombre, String apellidos, String telefono, String email, String especialidad,
-                       int aniosExperiencia, byte[] foto, CentroVeterinario centroVeterinario) {
+                       int aniosExperiencia, CentroVeterinario centroVeterinario) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.telefono = telefono;
         this.email = email;
         this.especialidad = especialidad;
         this.aniosExperiencia = aniosExperiencia;
-        this.foto = foto;
+        // this.foto = foto;
         this.centroVeterinario = centroVeterinario;
     }
 
@@ -101,15 +101,15 @@ public class Veterinario {
         this.aniosExperiencia = aniosExperiencia;
     }
 
-    @Basic
-    @Column(name = "foto")
-    public byte[] getFoto() {
-        return foto;
-    }
+    // @Basic
+    // @Column(name = "foto")
+    // public byte[] getFoto() {
+    //     return foto;
+    // }
 
-    public void setFoto(byte[] foto) {
-        this.foto = foto;
-    }
+    // public void setFoto(byte[] foto) {
+    //     this.foto = foto;
+    // }
 
     @ManyToOne
     @JoinColumn(name = "idCentroVeterinario", referencedColumnName = "idCentro")
@@ -151,7 +151,7 @@ public class Veterinario {
                 ", email='" + email + '\'' +
                 ", especialidad='" + especialidad + '\'' +
                 ", aniosExperiencia=" + aniosExperiencia +
-                ", foto=" + (foto != null ? "[Archivo de imagen]" : "Ninguna foto") +
+                //", foto=" + (foto != null ? "[Archivo de imagen]" : "Ninguna foto") +
                 ", centroVeterinario=" + centroVeterinario +
                 '}';
     }

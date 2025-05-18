@@ -95,3 +95,11 @@ CREATE TABLE IF NOT EXISTS Adopcion (
     FOREIGN KEY (idAnimal) REFERENCES Animal(idAnimal),
     FOREIGN KEY (idAdoptante) REFERENCES Adoptante(idAdoptante)
 );
+
+-- Tabla: Usuarios
+CREATE TABLE IF NOT EXISTS Usuario (
+    idUsuario INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    tipoUsuario VARCHAR(13) NOT NULL
+);

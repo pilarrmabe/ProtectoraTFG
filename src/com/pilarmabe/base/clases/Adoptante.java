@@ -14,12 +14,12 @@ public class Adoptante {
     private String telefono;
     private String email;
     private Date fechaRegistro;
-    private byte[] foto;
+    // private byte[] foto;
 
     public Adoptante() {
     }
 
-    public Adoptante(String nombre, String apellidos, String dni, String direccion, String telefono, String email, Date fechaRegistro, byte[] foto) {
+    public Adoptante(String nombre, String apellidos, String dni, String direccion, String telefono, String email, Date fechaRegistro) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.dni = dni;
@@ -27,10 +27,11 @@ public class Adoptante {
         this.telefono = telefono;
         this.email = email;
         this.fechaRegistro = fechaRegistro;
-        this.foto = foto;
+        // this.foto = foto;
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idAdoptante")
     public int getIdAdoptante() {
         return idAdoptante;
@@ -110,15 +111,15 @@ public class Adoptante {
         this.fechaRegistro = fechaRegistro;
     }
 
-    @Lob
-    @Column(name = "foto")
-    public byte[] getFoto() {
-        return foto;
-    }
+    // @Lob
+    // @Column(name = "foto")
+    // public byte[] getFoto() {
+    //     return foto;
+    // }
 
-    public void setFoto(byte[] foto) {
-        this.foto = foto;
-    }
+    // public void setFoto(byte[] foto) {
+    //     this.foto = foto;
+    // }
 
     @Override
     public boolean equals(Object o) {
@@ -151,7 +152,7 @@ public class Adoptante {
                 ", telefono='" + telefono + '\'' +
                 ", email='" + email + '\'' +
                 ", fechaRegistro=" + fechaRegistro +
-                ", foto=" + (foto != null ? "[Archivo de imagen]" : "Ninguna foto") +
+                //", foto=" + (foto != null ? "[Archivo de imagen]" : "Ninguna foto") +
                 '}';
     }
 }
