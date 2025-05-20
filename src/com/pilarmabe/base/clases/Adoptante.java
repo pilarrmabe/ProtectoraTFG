@@ -13,13 +13,13 @@ public class Adoptante {
     private String direccion;
     private String telefono;
     private String email;
-    private Date fechaRegistro;
-    // private byte[] foto;
+    private String fechaRegistro;
+    private String foto;
 
     public Adoptante() {
     }
 
-    public Adoptante(String nombre, String apellidos, String dni, String direccion, String telefono, String email, Date fechaRegistro) {
+    public Adoptante(String nombre, String apellidos, String dni, String direccion, String telefono, String email, String fechaRegistro, String foto) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.dni = dni;
@@ -27,7 +27,7 @@ public class Adoptante {
         this.telefono = telefono;
         this.email = email;
         this.fechaRegistro = fechaRegistro;
-        // this.foto = foto;
+        this.foto = foto;
     }
 
     @Id
@@ -103,23 +103,23 @@ public class Adoptante {
 
     @Basic
     @Column(name = "fechaRegistro")
-    public Date getFechaRegistro() {
+    public String getFechaRegistro() {
         return fechaRegistro;
     }
 
-    public void setFechaRegistro(Date fechaRegistro) {
+    public void setFechaRegistro(String fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
 
-    // @Lob
-    // @Column(name = "foto")
-    // public byte[] getFoto() {
-    //     return foto;
-    // }
+    @Lob
+    @Column(name = "foto")
+    public String getFoto() {
+        return foto;
+    }
 
-    // public void setFoto(byte[] foto) {
-    //     this.foto = foto;
-    // }
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
 
     @Override
     public boolean equals(Object o) {
