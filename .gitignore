@@ -1,3 +1,5 @@
 *.class
 out/production/Practica2-UD3-PilarMayayoBerruezo/hibernate.cfg.xml
 .idea/misc.xml
+out/production/Practica2-UD3-PilarMayayoBerruezo/com/pilarmabe/base/img
+src/com/pilarmabe/base/img

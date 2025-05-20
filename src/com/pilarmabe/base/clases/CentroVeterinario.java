@@ -13,12 +13,12 @@ public class CentroVeterinario {
     private String email;
     private String fechaRegistro;
     private boolean servicioUrgencias;
-    // private byte[] fotoCentro;
+    private String fotoCentro;
 
     public CentroVeterinario() {}
 
     public CentroVeterinario(String nombre, String direccion, String codigoPostal, String telefono, String email,
-                             String fechaRegistro, boolean servicioUrgencias, byte[] fotoCentro) {
+                             String fechaRegistro, boolean servicioUrgencias, String fotoCentro) {
         this.nombre = nombre;
         this.direccion = direccion;
         this.codigoPostal = codigoPostal;
@@ -26,7 +26,7 @@ public class CentroVeterinario {
         this.email = email;
         this.fechaRegistro = fechaRegistro;
         this.servicioUrgencias = servicioUrgencias;
-        // this.fotoCentro = fotoCentro;
+        this.fotoCentro = fotoCentro;
     }
 
     @Id
@@ -105,13 +105,13 @@ public class CentroVeterinario {
 
     @Lob
     @Column(name = "fotoCentro")
-    // public byte[] getFotoCentro() {
-    //     return fotoCentro;
-    // }
+    public String getFotoCentro() {
+        return fotoCentro;
+    }
 
-    // public void setFotoCentro(byte[] fotoCentro) {
-    //     this.fotoCentro = fotoCentro;
-    // }
+    public void setFotoCentro(String fotoCentro) {
+        this.fotoCentro = fotoCentro;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -136,7 +136,7 @@ public class CentroVeterinario {
                 ", email='" + email + '\'' +
                 ", fechaRegistro='" + fechaRegistro + '\'' +
                 ", servicioUrgencias=" + servicioUrgencias +
-                // ", fotoCentro=" + (fotoCentro != null ? "[Archivo de imagen]" : "Ninguna foto") +
+                ", fotoCentro=" + fotoCentro +
                 '}';
     }
 }

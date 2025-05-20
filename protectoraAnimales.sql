@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS Refugio (
     email VARCHAR(100),
     capacidad INT,
     fechaApertura DATE,
-    logoRefugio LONGBLOB
+    logoRefugio VARCHAR(100)
 );
 
 -- Tabla: Centro Veterinario
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS Animal (
     necesidades VARCHAR(300),
     estado VARCHAR(50),
     numeroMicrochip VARCHAR(50) UNIQUE,
-    foto LONGBLOB,
+    logoAnimal VARCHAR(100),
     idRefugio INT,
     idVeterinario INT,
     idAdoptante INT,

@@ -21,6 +21,7 @@ public class Vista extends JFrame {
     public DefaultListModel<Refugio> dlmRefugios;
     public DefaultListModel<Animal> dlmAnimales;
     public DefaultListModel<Usuario> dlmUsuarios;
+    public DefaultListModel<Veterinario> dlmVeterinarios;
     public DefaultListModel<CentroVeterinario> dlmCentros;
     public DefaultComboBoxModel<Refugio> dcbRefugio;
 
@@ -46,8 +47,8 @@ public class Vista extends JFrame {
     public JButton btnAnimalAnadir;
     public JButton btnAnimalModificar;
     public JButton btnAnimalEliminar;
+    public JLabel animalLogo;
     public JList<Animal> listAnimal;
-    public JTextField txtFotoAnimal;
 
     // === Panel Refugio ===
     public JPanel JPanelRefugio;
@@ -61,10 +62,10 @@ public class Vista extends JFrame {
     public JSpinner capacidadRef;
     public DatePicker fechaAperturaRef;
     public JTextField txtBuscarRefugio;
-    public JTextField logoRefugio;
     public JButton btnRefAñadir;
     public JButton btnRefModificar;
     public JButton btnRefEliminar;
+    public JLabel refugioLogo;
     public JList<Refugio> listRefugio;
 
     // === Panel Adoptante ===
@@ -101,7 +102,6 @@ public class Vista extends JFrame {
     public JPanel JPanelCentroVet;
     public JTextField txtNombreCentro;
     public JRadioButton urgenciasCentro;
-    public JTextField logoVeterinario;
     public JTextField txtBuscarCentro;
     public JButton btnAniadirCentro;
     public JButton btnModCentro;
@@ -111,6 +111,7 @@ public class Vista extends JFrame {
     public JTextField txtCpCentro;
     public JTextField txtTelfCentro;
     public JTextField txtEmailCentro;
+    public JLabel fotoCentro;
     public DatePicker fechaRegistroCentro;
 
     // === Panel Veterinario ===
@@ -121,7 +122,7 @@ public class Vista extends JFrame {
     public JTextField txtTlfVet;
     public JComboBox comboEspecialidad;
     public JSpinner aniosExperienciaVet;
-    public JTextField fotoVeterinario;
+    public JLabel fotoVeterinario;
     public JTextField txtBuscarVeterinario;
     public JComboBox comboCentroDelVet;
     public JList<Veterinario> listVeterinario;
@@ -163,10 +164,12 @@ public class Vista extends JFrame {
         dlmRefugios = new DefaultListModel<>();
         dlmUsuarios = new DefaultListModel<>();
         dlmCentros = new DefaultListModel<>();
+        dlmVeterinarios = new DefaultListModel<>();
 
         listRefugio.setModel(dlmRefugios);
         listAnimal.setModel(dlmAnimales);
         listUsuario.setModel(dlmUsuarios);
+        listVeterinario.setModel(dlmVeterinarios);
         listCentro.setModel(dlmCentros);
         System.out.println("List refugio: " + listRefugio);
         System.out.println("dlm refugio: " + dlmRefugios);
@@ -192,20 +195,39 @@ public class Vista extends JFrame {
         System.out.println("final crear menu");
     }
 
-    public byte[] getFoto() {
-        byte[] foto = null;
+    public String getFoto() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Selecciona una imagen");
         int seleccion = fileChooser.showOpenDialog(this);
         if (seleccion == JFileChooser.APPROVE_OPTION) {
             java.io.File archivo = fileChooser.getSelectedFile();
             try {
-                foto = java.nio.file.Files.readAllBytes(archivo.toPath());
+                // foto = java.nio.file.Files.readAllBytes(archivo.toPath());
+
+                // Ruta donde se guardará la imagen dentro del proyecto
+                String rutaDestino = System.getProperty("user.dir") + java.io.File.separator +
+                    "src" + java.io.File.separator +
+                    "com" + java.io.File.separator +
+                    "pilarmabe" + java.io.File.separator +
+                    "base" + java.io.File.separator + "img";
+                java.io.File carpetaDestino = new java.io.File(rutaDestino);
+                if (!carpetaDestino.exists()) {
+                    carpetaDestino.mkdirs();
+                }
+                // Guardar la imagen con el mismo nombre
+                java.io.File archivoDestino = new java.io.File(carpetaDestino, archivo.getName());
+                java.nio.file.Files.copy(
+                    archivo.toPath(),
+                    archivoDestino.toPath(),
+                    java.nio.file.StandardCopyOption.REPLACE_EXISTING
+                );
+                return archivo.getName();
             } catch (java.io.IOException e) {
                 e.printStackTrace();
             }
         }
-        return foto;
+        return null;
+        
     }
 
     public Blob convertirFotoABlob(byte[] foto) {

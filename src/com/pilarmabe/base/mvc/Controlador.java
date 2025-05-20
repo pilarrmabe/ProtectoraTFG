@@ -7,7 +7,9 @@ import com.pilarmabe.base.util.HibernateUtil;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -32,6 +34,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
             controlUsuarios();
             listarRefugios(null);
             listarCentros(null);
+            listarAnimales(null);
             refrescarPanelUsuarios();
             cargarCombos();
             // listarRefugios(null);
@@ -169,8 +172,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                         vista.txtEmailRef.getText(),
                         Integer.parseInt(vista.capacidadRef.getValue().toString()),
                         vista.fechaAperturaRef.getDate().toString(),
-                            // vista.getFoto()
-                            vista.txtNombreRef.getText()
+                        vista.getFoto()
 
                     );
                     modelo.nuevoRefugio(refugio);
@@ -222,9 +224,9 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                             vista.txtObservaciones.getText(),
                             vista.txtNecesidades.getText(),
                             vista.txtNumMicrochip.getText(),
-                            // vista.getFoto(),
                             (Refugio) vista.comboRefugioAnimal.getSelectedItem(),
-                            (Veterinario) vista.comboVetAnimal.getSelectedItem()
+                            (Veterinario) vista.comboVetAnimal.getSelectedItem(),
+                            vista.getFoto()
                     );
                     modelo.nuevoAnimal(animal);
                     break;
@@ -343,7 +345,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                             vista.txtEmailVet.getText(),
                             vista.comboEspecialidad.getSelectedItem().toString(),
                             Integer.parseInt(vista.aniosExperienciaVet.getValue().toString()),
-                            // vista.getFoto(),
+                            vista.getFoto(),
                             (CentroVeterinario) vista.comboCentroDelVet.getSelectedItem()
                     );
                     modelo.nuevoVeterinario(vet);
@@ -459,76 +461,93 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
 
     }
 
-    @Override
-    public void valueChanged(ListSelectionEvent listSelectionEvent) {
-        if (vista.listAnimal.getSelectedValue() != null) { // Cambiado listaAnimales a listAnimal
-            Animal a = vista.listAnimal.getSelectedValue();
-            vista.txtNombreAnimal.setText(a.getNombre()); // Cambiado txtNombre a txtNombreAnimal
-            vista.comboEspecie.setSelectedItem(a.getEspecie()); // Cambiado txtEspecie a comboEspecie
-            vista.comboRaza.setSelectedItem(a.getRaza()); // Cambiado txtRaza a comboRaza
-            vista.comboSexo.setSelectedItem(a.getSexo()); // Cambiado txtSexo a comboSexo
-            vista.fechaNacimAnimal.setDate(java.time.LocalDate.parse(a.getFechaNacimiento())); // Cambiado setFechaNacimiento a fechaNacimAnimal.setDate
-            vista.fechaIngresoAnimal.setDate(java.time.LocalDate.parse(a.getFechaIngreso())); // Cambiado setFechaIngreso a fechaIngresoAnimal.setDate
-            vista.txtEdadAnimal.setText(String.valueOf(a.getEdad())); // Cambiado txtEdad a txtEdadAnimal
-            vista.pesoAnimal.setValue(a.getPeso()); // Cambiado txtPeso a pesoAnimal
-            vista.txtSaludAnimal.setText(a.getSalud()); // Cambiado txtSalud a txtSaludAnimal
-            vista.txtObservaciones.setText(a.getComportamiento()); // Cambiado txtComportamiento a txtObservaciones
-            vista.txtNecesidades.setText(a.getNecesidades());
-            vista.txtNumMicrochip.setText(a.getNumeroMicrochip()); // Cambiado txtNumeroMicrochip a txtNumMicrochip
-            vista.comboRefugioAnimal.setSelectedItem(a.getRefugio()); // Cambiado comboRefugio a comboRefugioAnimal
-            vista.comboVetAnimal.setSelectedItem(a.getVeterinario()); // Cambiado comboVeterinario a comboVetAnimal
-
-        } else if (listSelectionEvent.getSource() == vista.listRefugio && vista.listRefugio.getSelectedValue() != null) {
-            Refugio refugio = vista.listRefugio.getSelectedValue();
-            vista.txtNombreRef.setText(refugio.getNombre());
-            vista.txtDireccionRef.setText(refugio.getDireccion()); // Cambiado txtApellido a txtDireccionRef
-            vista.txtCiudadRef.setText(refugio.getCiudad()); // Cambiado txtAniosExperiencia a txtCiudadRef
-            // vista.txtCiudadRef.setText(refugio.getCiudad()); 
-            vista.txtCPRef.setText(refugio.getCodigoPostal()); // Cambiado txtTelefono a txtCPRef
-            vista.txtResponsable.setText(refugio.getResponsable()); // Cambiado txtTelefono a txtCPRef
-            vista.txtTelfRef.setText(refugio.getTelefono()); // Cambiado txtTelefono a txtCPRef
-            vista.txtEmailRef.setText(refugio.getEmail()); // Cambiado txtTelefono a txtCPRef
-            vista.capacidadRef.setValue(refugio.getCapacidad()); // Cambiado txtTelefono a txtCPRef
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Ajusta el formato si es necesario
-            LocalDate fechaApertura = LocalDate.parse(refugio.getFechaApertura(), formatter);
-            vista.fechaAperturaRef.setDate(fechaApertura);
-
-
+   @Override
+    public void valueChanged(ListSelectionEvent e) {
+        if (e.getSource() == vista.listAnimal && vista.listAnimal.getSelectedValue() != null) {
+            rellenarAnimal(vista.listAnimal.getSelectedValue());
+        } else if (e.getSource() == vista.listRefugio && vista.listRefugio.getSelectedValue() != null) {
+            rellenarRefugio(vista.listRefugio.getSelectedValue());
         } else if (vista.listAdopcion.getSelectedValue() != null) {
-            Adopcion a = vista.listAdopcion.getSelectedValue();
-            vista.comboAnimalAdopcion.setSelectedItem(a.getAnimal()); // Cambiado comboAnimal a comboAnimalAdopcion
-            vista.comboAdoptanteAdopcion.setSelectedItem(a.getAdoptante()); // Cambiado comboAdoptante a comboAdoptanteAdopcion
-            vista.fechaAdopcion.setDate(a.getFechaAdopcion().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate()); // Cambiado setFechaAdopcion a fechaAdopcion.setDate
-            vista.comboEstadoAdopcion.setSelectedItem(a.getEstadoAdopcion()); // Cambiado txtEstado a comboEstadoAdopcion
-            vista.txtObservacionAdopcion.setText(a.getObservaciones()); // Cambiado txtObservaciones a txtObservacionAdopcion
-
-        } else if (vista.listVeterinario.getSelectedValue() != null) { // Cambiado listaVeterinarios a listVeterinario
-            Veterinario v = vista.listVeterinario.getSelectedValue();
-            vista.txtNombreVet.setText(v.getNombre()); // Cambiado txtNombre a txtNombreVet
-            vista.txtApellidosVet.setText(v.getApellidos()); // Cambiado txtApellidos a txtApellidosVet
-            vista.txtTlfVet.setText(v.getTelefono()); // Cambiado txtTelefono a txtTlfVet
-            vista.txtEmailVet.setText(v.getEmail()); // Cambiado txtEmail a txtEmailVet
-            vista.comboEspecialidad.setSelectedItem(v.getEspecialidad()); // Cambiado txtEspecialidad a comboEspecialidad
-            vista.aniosExperienciaVet.setValue(v.getAniosExperiencia()); // Cambiado txtAniosExperiencia a aniosExperienciaVet
-            vista.comboCentroDelVet.setSelectedItem(v.getCentroVeterinario()); // Cambiado comboCentroVet a comboCentroDelVet
-        } else if (listSelectionEvent.getSource() == vista.listUsuario && vista.listUsuario.getSelectedValue() != null) { // Cambiado listaVeterinarios a listVeterinario
-            Usuario v = vista.listUsuario.getSelectedValue();
-            vista.txtNombre.setText(v.getNombre()); // Cambiado txtNombre a txtNombreVet
-            vista.txtPass.setText(v.getPass()); // Cambiado txtApellidos a txtApellidosVet
-            ValoresCombos.TipoUsuario tipoUsuario = ValoresCombos.TipoUsuario.valueOf(v.getTipoUsuario().toUpperCase());
-            vista.comboTipoUsuario.setSelectedItem(tipoUsuario); // Cambiado txtTelefono a txtTlfVet
-            // vista.comboTipoUsuario.setSelectedItem(v.getTipoUsuario()); // Cambiado txtTelefono a txtTlfVet
-        } else if (listSelectionEvent.getSource() == vista.listCentro && vista.listCentro.getSelectedValue() != null) { // Cambiado listaVeterinarios a listVeterinario
-            CentroVeterinario v = vista.listCentro.getSelectedValue();
-            vista.txtNombreCentro.setText(v.getNombre()); // Cambiado txtNombre a txtNombreVet
-            vista.txtDireccionCentro.setText(v.getDireccion()); // Cambiado txtNombre a txtNombreVet
-            vista.txtCpCentro.setText(v.getCodigoPostal()); // Cambiado txtNombre a txtNombreVet
-            vista.txtTelfCentro.setText(v.getTelefono()); // Cambiado txtNombre a txtNombreVet
-            vista.txtEmailCentro.setText(v.getEmail()); // Cambiado txtNombre a txtNombreVet
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Ajusta el formato si es necesario
-            LocalDate fechaRegistro = LocalDate.parse(v.getFechaRegistro(), formatter);
-            vista.fechaRegistroCentro.setDate(fechaRegistro);
+            rellenarAdopcion(vista.listAdopcion.getSelectedValue());
+        } else if (vista.listVeterinario.getSelectedValue() != null) {
+            rellenarVeterinario(vista.listVeterinario.getSelectedValue());
+        } else if (e.getSource() == vista.listUsuario && vista.listUsuario.getSelectedValue() != null) {
+            rellenarUsuario(vista.listUsuario.getSelectedValue());
+        } else if (e.getSource() == vista.listCentro && vista.listCentro.getSelectedValue() != null) {
+            rellenarCentro(vista.listCentro.getSelectedValue());
         }
+    }
+
+    private void rellenarAnimal(Animal a) {
+        vista.txtNombreAnimal.setText(a.getNombre());
+        vista.comboEspecie.setSelectedItem(a.getEspecie());
+        vista.comboRaza.setSelectedItem(a.getRaza());
+        vista.comboSexo.setSelectedItem(a.getSexo());
+        vista.fechaNacimAnimal.setDate(LocalDate.parse(a.getFechaNacimiento()));
+        vista.fechaIngresoAnimal.setDate(LocalDate.parse(a.getFechaIngreso()));
+        vista.txtEdadAnimal.setText(String.valueOf(a.getEdad()));
+        vista.pesoAnimal.setValue(a.getPeso());
+        vista.txtSaludAnimal.setText(a.getSalud());
+        vista.txtObservaciones.setText(a.getComportamiento());
+        vista.txtNecesidades.setText(a.getNecesidades());
+        vista.txtNumMicrochip.setText(a.getNumeroMicrochip());
+        vista.comboRefugioAnimal.setSelectedItem(a.getRefugio());
+        vista.comboVetAnimal.setSelectedItem(a.getVeterinario());
+        vista.animalLogo.setIcon(new ImageIcon(getImagen(a.getLogoAnimal())));
+    }
+
+    private void rellenarRefugio(Refugio refugio) {
+        vista.txtNombreRef.setText(refugio.getNombre());
+        vista.txtDireccionRef.setText(refugio.getDireccion());
+        vista.txtCiudadRef.setText(refugio.getCiudad());
+        vista.txtCPRef.setText(refugio.getCodigoPostal());
+        vista.txtResponsable.setText(refugio.getResponsable());
+        vista.txtTelfRef.setText(refugio.getTelefono());
+        vista.txtEmailRef.setText(refugio.getEmail());
+        vista.capacidadRef.setValue(refugio.getCapacidad());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate fechaApertura = LocalDate.parse(refugio.getFechaApertura(), formatter);
+        vista.fechaAperturaRef.setDate(fechaApertura);
+        vista.refugioLogo.setIcon(new ImageIcon(getImagen(refugio.getLogoRefugio())));
+
+    }
+
+    private void rellenarAdopcion(Adopcion a) {
+        vista.comboAnimalAdopcion.setSelectedItem(a.getAnimal());
+        vista.comboAdoptanteAdopcion.setSelectedItem(a.getAdoptante());
+        vista.fechaAdopcion.setDate(a.getFechaAdopcion().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate());
+        vista.comboEstadoAdopcion.setSelectedItem(a.getEstadoAdopcion());
+        vista.txtObservacionAdopcion.setText(a.getObservaciones());
+    }
+
+    private void rellenarVeterinario(Veterinario v) {
+        vista.txtNombreVet.setText(v.getNombre());
+        vista.txtApellidosVet.setText(v.getApellidos());
+        vista.txtTlfVet.setText(v.getTelefono());
+        vista.txtEmailVet.setText(v.getEmail());
+        vista.comboEspecialidad.setSelectedItem(v.getEspecialidad());
+        vista.aniosExperienciaVet.setValue(v.getAniosExperiencia());
+        vista.comboCentroDelVet.setSelectedItem(v.getCentroVeterinario());
+        vista.fotoVeterinario.setIcon(new ImageIcon(getImagen(v.getFoto())));
+    }
+
+    private void rellenarUsuario(Usuario v) {
+        vista.txtNombre.setText(v.getNombre());
+        vista.txtPass.setText(v.getPass());
+        ValoresCombos.TipoUsuario tipoUsuario = ValoresCombos.TipoUsuario.valueOf(v.getTipoUsuario().toUpperCase());
+        vista.comboTipoUsuario.setSelectedItem(tipoUsuario);
+    }
+
+    private void rellenarCentro(CentroVeterinario v) {
+        vista.txtNombreCentro.setText(v.getNombre());
+        vista.txtDireccionCentro.setText(v.getDireccion());
+        vista.txtCpCentro.setText(v.getCodigoPostal());
+        vista.txtTelfCentro.setText(v.getTelefono());
+        vista.txtEmailCentro.setText(v.getEmail());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate fechaRegistro = LocalDate.parse(v.getFechaRegistro(), formatter);
+        vista.fechaRegistroCentro.setDate(fechaRegistro);
+        vista.fotoCentro.setIcon(new ImageIcon(getImagen(v.getFotoCentro())));
     }
 
 
@@ -567,7 +586,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
 
         vista.comboAnimalAdopcion.removeAllItems();
-        for (Animal a : modelo.obtenerAnimales()) {
+        for (Animal a : modelo.obtenerAnimales(false)) {
             vista.comboAnimalAdopcion.addItem(a); 
         }
 
@@ -587,7 +606,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
 
         vista.comboVetAnimal.removeAllItems();
-        for (Veterinario vet : modelo.obtenerVeterinarios()) {
+        for (Veterinario vet : modelo.obtenerVeterinarios(true)) {
             vista.comboVetAnimal.addItem(vet);
         }
 
@@ -600,14 +619,14 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
 
         vista.comboAnimalAdopcion.removeAllItems();
-        for (Animal ad : modelo.obtenerAnimales()) {
+        for (Animal ad : modelo.obtenerAnimales(false)) {
             vista.comboAnimalAdopcion.addItem(ad);
         }
     }
 
     private void refrescarPanelRefugios(){
         modelo.obtenerRefugios(true);
-        listarUsuarios(null);
+        listarRefugios(null);
     }
 
     private void refrescarPanelUsuarios(){
@@ -620,6 +639,11 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         listarCentros(null);
     }
 
+    private void refrescarPanelAnimales(){
+        modelo.obtenerAnimales(true);
+        listarAnimales(null);
+    }
+
     private void listarRefugios(String nombre) {
         List<Refugio> refugios = modelo.obtenerRefugios(false);
         vista.dlmRefugios.clear();
@@ -629,6 +653,18 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         
         for(Refugio refugio : refugios){
             vista.dlmRefugios.addElement(refugio);
+        }
+    }
+
+    private void listarVeterinario(String nombre) {
+        List<Veterinario> veterinarios = modelo.obtenerVeterinarios(false);
+        vista.dlmRefugios.clear();
+        if (nombre != null && !nombre.isEmpty() && !nombre.equals("")) {
+            veterinarios = modelo.obtenerVeterinariosPorNombre(nombre);
+        }
+        
+        for(Veterinario veterinario : veterinarios){
+            vista.dlmVeterinarios.addElement(veterinario);
         }
     }
 
@@ -645,8 +681,8 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
     }
 
     private void listarAnimales(String nombre) {
-        List<Animal> animales = modelo.obtenerAnimales();
-        vista.dlmRefugios.clear();
+        List<Animal> animales = modelo.obtenerAnimales(false);
+        vista.dlmAnimales.clear();
         if (nombre != null && !nombre.isEmpty() && !nombre.equals("")) {
             animales = modelo.obtenerAnimalesPorNombre(nombre);
         }
@@ -658,7 +694,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
 
     private void listarCentros(String nombre) {
         List<CentroVeterinario> centros = modelo.obtenerCentrosVeterinarios(false);
-        vista.dlmCentros    .clear();
+        vista.dlmCentros.clear();
         if (nombre != null && !nombre.isEmpty() && !nombre.equals("")) {
             centros = modelo.obtenerCentrosPorNombre(nombre);
         }
@@ -666,6 +702,31 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         for(CentroVeterinario centro : centros){
             vista.dlmCentros.addElement(centro);
         }
+    }
+
+    private Image getImagen(String logo) {
+        if(logo == null || logo.isEmpty()) {
+            BufferedImage img = new BufferedImage(120, 120, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2d = img.createGraphics();
+            g2d.setColor(Color.LIGHT_GRAY);
+            g2d.fillRect(0, 0, 120, 120);
+            g2d.setColor(Color.BLACK);
+            g2d.drawString("Sin imagen", 20, 60);
+            g2d.dispose();
+            return img.getScaledInstance(vista.refugioLogo.getWidth(), vista.refugioLogo.getHeight(), Image.SCALE_SMOOTH);
+        }
+        String rutaImagen = System.getProperty("user.dir") + java.io.File.separator +
+            "src" + java.io.File.separator +
+            "com" + java.io.File.separator +
+            "pilarmabe" + java.io.File.separator +
+            "base" + java.io.File.separator +
+            "img" + java.io.File.separator +
+            logo;
+
+        ImageIcon icon = new ImageIcon(rutaImagen);
+        // Escalar la imagen al tamaño del JLabel si lo necesitas:
+        Image imagen = icon.getImage().getScaledInstance(vista.refugioLogo.getWidth(), vista.refugioLogo.getHeight(), Image.SCALE_SMOOTH);
+        return imagen;
     }
 
     /**
