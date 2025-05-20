@@ -23,6 +23,8 @@ public class Vista extends JFrame {
     public DefaultListModel<Usuario> dlmUsuarios;
     public DefaultListModel<Veterinario> dlmVeterinarios;
     public DefaultListModel<CentroVeterinario> dlmCentros;
+    public DefaultListModel<Adoptante> dlmAdoptantes;
+    public DefaultListModel<Adopcion> dlmAdopcion;
     public DefaultComboBoxModel<Refugio> dcbRefugio;
 
     // === Panel Animal ===
@@ -76,12 +78,12 @@ public class Vista extends JFrame {
     public JTextField txtDireccAdoptante;
     public JTextField txtTelfAdoptante;
     public JTextField txtEmailAdoptante;
-    public JTextField fotoAdoptante;
     public DatePicker fechaRegistroAdoptante;
     public JButton btnAniadirAdoptante;
     public JButton btnModAdoptante;
     public JButton btnEliminarAdoptante;
     public JTextField txtBuscarAdoptante;
+    public JLabel fotoAdoptante;
     public JList<Adoptante> listAdoptante;
 
     // === Panel Adopción ===
@@ -165,12 +167,16 @@ public class Vista extends JFrame {
         dlmUsuarios = new DefaultListModel<>();
         dlmCentros = new DefaultListModel<>();
         dlmVeterinarios = new DefaultListModel<>();
+        dlmAdoptantes = new DefaultListModel<>();
+        dlmAdopcion = new DefaultListModel<>();
 
         listRefugio.setModel(dlmRefugios);
         listAnimal.setModel(dlmAnimales);
         listUsuario.setModel(dlmUsuarios);
         listVeterinario.setModel(dlmVeterinarios);
         listCentro.setModel(dlmCentros);
+        listAdoptante.setModel(dlmAdoptantes);
+        listAdopcion.setModel(dlmAdopcion);
         System.out.println("List refugio: " + listRefugio);
         System.out.println("dlm refugio: " + dlmRefugios);
         dcbRefugio = new DefaultComboBoxModel<>();

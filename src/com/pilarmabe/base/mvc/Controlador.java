@@ -35,8 +35,12 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
             listarRefugios(null);
             listarCentros(null);
             listarAnimales(null);
+            listarVeterinario(null);
+            listarAdoptante(null);
+            listarAdopcion(null);
             refrescarPanelUsuarios();
             cargarCombos();
+            configurarComboRenderers();
             // listarRefugios(null);
             // base de datos¿?            
             // refrescarSeccionRefugios();
@@ -307,8 +311,8 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                         vista.txtDireccAdoptante.getText(),
                         vista.txtTelfAdoptante.getText(),
                         vista.txtEmailAdoptante.getText(),
-                        java.sql.Date.valueOf(vista.fechaRegistroAdoptante.getDate())
-                        // vista.getFoto()
+                        vista.fechaRegistroAdoptante.getDate().toString(),
+                        vista.getFoto()
                     );
                     modelo.nuevoAdoptante(adoptante);
                     break;
@@ -322,7 +326,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
                         seleccion.setDireccion(vista.txtDireccAdoptante.getText()); // Cambiado txtDireccion a txtDireccAdoptante
                         seleccion.setTelefono(vista.txtTelfAdoptante.getText()); // Cambiado txtTelefono a txtTelfAdoptante
                         seleccion.setEmail(vista.txtEmailAdoptante.getText()); // Cambiado txtEmail a txtEmailAdoptante
-                        seleccion.setFechaRegistro(java.sql.Date.valueOf(vista.fechaRegistroAdoptante.getDate())); // Cambiado getFechaRegistro() a fechaRegistroAdoptante.getDate()
+                        seleccion.setFechaRegistro(vista.fechaRegistroAdoptante.getDate().toString()); // Cambiado getFechaRegistro() a fechaRegistroCentro.getDate().toString()
                         // seleccion.setFoto(vista.getFoto()); 
                         modelo.modificarAdoptante(seleccion);
                     } else {
@@ -467,14 +471,16 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
             rellenarAnimal(vista.listAnimal.getSelectedValue());
         } else if (e.getSource() == vista.listRefugio && vista.listRefugio.getSelectedValue() != null) {
             rellenarRefugio(vista.listRefugio.getSelectedValue());
-        } else if (vista.listAdopcion.getSelectedValue() != null) {
+        } else if (e.getSource() == vista.listAdopcion && vista.listAdopcion.getSelectedValue() != null) {
             rellenarAdopcion(vista.listAdopcion.getSelectedValue());
-        } else if (vista.listVeterinario.getSelectedValue() != null) {
+        } else if (e.getSource() == vista.listVeterinario && vista.listVeterinario.getSelectedValue() != null) {
             rellenarVeterinario(vista.listVeterinario.getSelectedValue());
         } else if (e.getSource() == vista.listUsuario && vista.listUsuario.getSelectedValue() != null) {
             rellenarUsuario(vista.listUsuario.getSelectedValue());
         } else if (e.getSource() == vista.listCentro && vista.listCentro.getSelectedValue() != null) {
             rellenarCentro(vista.listCentro.getSelectedValue());
+        } else if (e.getSource() == vista.listAdoptante && vista.listAdoptante.getSelectedValue() != null) {
+            rellenarAdoptante(vista.listAdoptante.getSelectedValue());
         }
     }
 
@@ -548,6 +554,19 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         LocalDate fechaRegistro = LocalDate.parse(v.getFechaRegistro(), formatter);
         vista.fechaRegistroCentro.setDate(fechaRegistro);
         vista.fotoCentro.setIcon(new ImageIcon(getImagen(v.getFotoCentro())));
+    }
+
+    private void rellenarAdoptante(Adoptante adoptante) {
+        vista.txtNombreAdoptante.setText(adoptante.getNombre());
+        vista.txtApellidosAdoptante.setText(adoptante.getApellidos());
+        vista.dniAdoptante.setText(adoptante.getDni());
+        vista.txtDireccAdoptante.setText(adoptante.getDireccion());
+        vista.txtTelfAdoptante.setText(adoptante.getTelefono());
+        vista.txtEmailAdoptante.setText(adoptante.getEmail());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate fechaRegistro = LocalDate.parse(adoptante.getFechaRegistro(), formatter);
+        vista.fechaRegistroAdoptante.setDate(fechaRegistro);
+        vista.fotoAdoptante.setIcon(new ImageIcon(getImagen(adoptante.getFoto())));
     }
 
 
@@ -624,6 +643,64 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
         }
     }
 
+    private void configurarComboRenderers() {
+    // Adoptante
+    vista.comboAdoptanteAdopcion.setRenderer(new DefaultListCellRenderer() {
+        @Override
+        public java.awt.Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            if (value instanceof Adoptante) {
+                value = ((Adoptante) value).getNombre();
+            }
+            return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+        }
+    });
+
+    // Refugio
+    vista.comboRefugioAnimal.setRenderer(new DefaultListCellRenderer() {
+        @Override
+        public java.awt.Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            if (value instanceof Refugio) {
+                value = ((Refugio) value).getNombre();
+            }
+            return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+        }
+    });
+
+    // Veterinario (nombre y apellidos)
+    vista.comboVetAnimal.setRenderer(new DefaultListCellRenderer() {
+        @Override
+        public java.awt.Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            if (value instanceof Veterinario) {
+                Veterinario v = (Veterinario) value;
+                value = v.getNombre() + " " + v.getApellidos();
+            }
+            return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+        }
+    });
+
+    // Centro Veterinario
+    vista.comboCentroDelVet.setRenderer(new DefaultListCellRenderer() {
+        @Override
+        public java.awt.Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            if (value instanceof CentroVeterinario) {
+                value = ((CentroVeterinario) value).getNombre();
+            }
+            return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+        }
+    });
+
+    // Animal (solo nombre)
+    vista.comboAnimalAdopcion.setRenderer(new DefaultListCellRenderer() {
+        @Override
+        public java.awt.Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            if (value instanceof Animal) {
+                value = ((Animal) value).getNombre();
+            }
+            return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+        }
+    });
+}
+
     private void refrescarPanelRefugios(){
         modelo.obtenerRefugios(true);
         listarRefugios(null);
@@ -658,7 +735,7 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
 
     private void listarVeterinario(String nombre) {
         List<Veterinario> veterinarios = modelo.obtenerVeterinarios(false);
-        vista.dlmRefugios.clear();
+        vista.dlmVeterinarios.clear();
         if (nombre != null && !nombre.isEmpty() && !nombre.equals("")) {
             veterinarios = modelo.obtenerVeterinariosPorNombre(nombre);
         }
@@ -701,6 +778,30 @@ public class Controlador extends WindowAdapter implements ActionListener, ListSe
 
         for(CentroVeterinario centro : centros){
             vista.dlmCentros.addElement(centro);
+        }
+    }
+
+    private void listarAdoptante(String nombre) {
+        List<Adoptante> adoptantes = modelo.obtenerAdoptantes();
+        vista.dlmAdoptantes.clear();
+        if (nombre != null && !nombre.isEmpty() && !nombre.equals("")) {
+            // adoptantes = modelo.obtenerAdoptantesPorNombre(nombre);
+        }
+        
+        for(Adoptante adoptante : adoptantes){
+            vista.dlmAdoptantes.addElement(adoptante);
+        }
+    }
+
+    private void listarAdopcion(String nombre) {
+        List<Adopcion> adopciones = modelo.obtenerAdopciones();
+        vista.dlmAdopcion.clear();
+        if (nombre != null && !nombre.isEmpty() && !nombre.equals("")) {
+            // adopciones = modelo.obtenerAdopcionesPorNombre(nombre);
+        }
+        
+        for(Adopcion adopcion : adopciones){
+            vista.dlmAdopcion.addElement(adopcion);
         }
     }
 

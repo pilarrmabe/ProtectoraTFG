@@ -112,7 +112,7 @@ public class Modelo {
         return HibernateUtil.getCurrentSession().createQuery("FROM Adoptante").getResultList();
     }
 
-    public List<Animal> obtenerAdopciones() {
+    public List<Adopcion> obtenerAdopciones() {
         return HibernateUtil.getCurrentSession().createQuery("FROM Adopcion").getResultList();
     }
 
