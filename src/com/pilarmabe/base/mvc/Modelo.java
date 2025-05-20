@@ -15,6 +15,7 @@ public class Modelo {
     private static List<Refugio> listaRefugios;
     private static List<Animal> listaAnimales;
     private static List<Usuario> listaUsuarios;
+    private static List<Veterinario> listaVeterinario;
     private static List<CentroVeterinario> listaCentroVeterinario;
     public String usuario = null;
 
@@ -90,8 +91,8 @@ public class Modelo {
 
     }
 
-    public List<Animal> obtenerAnimales() {
-        if (listaAnimales == null) {
+    public List<Animal> obtenerAnimales(Boolean refrescar) {
+        if (listaAnimales == null || refrescar) {
             listaAnimales = HibernateUtil.getCurrentSession().createQuery("FROM Animal").getResultList();
         }
         return listaAnimales;
@@ -115,8 +116,13 @@ public class Modelo {
         return HibernateUtil.getCurrentSession().createQuery("FROM Adopcion").getResultList();
     }
 
-    public List<Veterinario> obtenerVeterinarios() {
-        return HibernateUtil.getCurrentSession().createQuery("FROM Veterinario").getResultList();
+    public List<Veterinario> obtenerVeterinarios(Boolean refrescar) {
+        if (listaVeterinario == null || refrescar) {
+            System.out.println("iniciando lista de veterinarios");
+            listaVeterinario =  HibernateUtil.getCurrentSession().createQuery("FROM Veterinario").getResultList();
+            System.out.println("lista de veterinarios: " + listaUsuarios);
+        }
+        return  listaVeterinario;
     }
 
     public List<CentroVeterinario> obtenerCentrosVeterinarios(Boolean refrescar) {
@@ -136,7 +142,16 @@ public class Modelo {
             }
         }
         return listaCentrosFiltrados;
+    }
 
+    public List<Veterinario> obtenerVeterinariosPorNombre(String nombre){
+        List<Veterinario> listaVeterinariosFiltrados = new ArrayList<>();
+        for(Veterinario veterinario : listaVeterinario) {
+            if (veterinario.getNombre().contains(nombre)) {
+                listaVeterinariosFiltrados.add(veterinario);
+            }
+        }
+        return listaVeterinariosFiltrados;
     }
 
     public void nuevoRefugio(Refugio refugio) {

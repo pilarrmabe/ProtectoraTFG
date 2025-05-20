@@ -18,7 +18,7 @@ public class Animal {
     private String comportamiento;
     private String necesidades;
     private String numeroMicrochip;
-    // private byte[] foto;
+    private String logoAnimal;
     private Refugio refugio;
     private Veterinario veterinario;
 
@@ -28,7 +28,7 @@ public class Animal {
     public Animal(String nombre, String especie, String raza, String sexo, String fechaNacimiento,
                   String fechaIngreso, int edad, double peso, String salud, String comportamiento,
                   String necesidades, String numeroMicrochip,
-                  Refugio refugio, Veterinario veterinario) {
+                  Refugio refugio, Veterinario veterinario, String logoAnimal) {
         this.nombre = nombre;
         this.especie = especie;
         this.raza = raza;
@@ -41,7 +41,7 @@ public class Animal {
         this.comportamiento = comportamiento;
         this.necesidades = necesidades;
         this.numeroMicrochip = numeroMicrochip;
-        // this.foto = foto;
+        this.logoAnimal = logoAnimal;
         this.refugio = refugio;
         this.veterinario = veterinario;
     }
@@ -165,15 +165,15 @@ public class Animal {
         this.numeroMicrochip = numeroMicrochip;
     }
 
-    // @Lob
-    // @Column(name = "foto")
-    // public byte[] getFoto() {
-    //     return foto;
-    // }
+    @Lob
+    @Column(name = "logoAnimal")
+    public String getLogoAnimal() {
+        return logoAnimal;
+    }
 
-    // public void setFoto(byte[] foto) {
-    //     this.foto = foto;
-    // }
+    public void setLogoAnimal(String logoAnimal) {
+        this.logoAnimal = logoAnimal;
+    }
 
     @ManyToOne
     @JoinColumn(name = "idRefugio", referencedColumnName = "idRefugio")
@@ -224,7 +224,7 @@ public class Animal {
                 ", comportamiento='" + comportamiento + '\'' +
                 ", necesidades='" + necesidades + '\'' +
                 ", numeroMicrochip='" + numeroMicrochip + '\'' +
-                // ", foto=" + (foto != null ? "[Archivo de imagen]" : "Ninguna foto") +
+                ", logoAnimal=" + logoAnimal +
                 ", refugio=" + refugio +
                 ", veterinario=" + veterinario +
                 '}';
